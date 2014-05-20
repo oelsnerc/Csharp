@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BladeConfig", "BladeConfig\BladeConfig.csproj", "{B296B6D9-B2DB-4CD5-B958-566DCB18DA44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CachGrind.Net", "CachGrind.Net\CachGrind.Net.csproj", "{3F9C0E6D-0FF1-4CD0-AB9C-67E1943CB4C9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B296B6D9-B2DB-4CD5-B958-566DCB18DA44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B296B6D9-B2DB-4CD5-B958-566DCB18DA44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B296B6D9-B2DB-4CD5-B958-566DCB18DA44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B296B6D9-B2DB-4CD5-B958-566DCB18DA44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F9C0E6D-0FF1-4CD0-AB9C-67E1943CB4C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F9C0E6D-0FF1-4CD0-AB9C-67E1943CB4C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F9C0E6D-0FF1-4CD0-AB9C-67E1943CB4C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F9C0E6D-0FF1-4CD0-AB9C-67E1943CB4C9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

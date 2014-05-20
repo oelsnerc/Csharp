@@ -1,0 +1,589 @@
+<HYBRID_CONFIGURATION>
+
+    <BLADECENTER_CONFIGURATION>
+
+        <CLASSES>
+
+            <!--
+                   This section contains the definition of all classes used by the CONFIGURATION section below
+
+                   UUIDs, serial numbers, and MAC addresses are automatically created unless explicitly defined here
+                   The bay is automatically assigned (unless explicitly defined) and starts at 1, in case of blade the
+                   blade width indicator is used to calculate the next bay
+
+                   All classes defined must be derived of one of the following base classes :
+
+                   CHASSIS
+                   POWER_MODULE
+                   BLOWER_MODULE
+                   MEDIA_TRAY
+                   MANAGEMENT_MODULE
+                   SWITCH_MODULE
+                   BLADE
+                   LOW_SPEED_EXPANSION_CARD
+                   HIGH_SPEED_EXPANSION_CARD
+                   EXPANSION_UNIT
+                   ANCHOR_CARD
+                   SIDE_SCALE_CARD
+                   DIMM
+                   CPU
+
+                   valid attributes are :
+
+                   for CHASSIS           : SERIALNO, UUID, PARTNO, HWLEVEL, MACHTYPE, MACHMODEL
+                       POWER_MODULE      : BAY, UUID, PARTNO, SERIALNO, HWLEVEL
+                       BLOWER_MODULE     : BAY, UUID, PARTNO, SERIALNO, HWLEVEL
+                       MEDIA_TRAY        : BAY, UUID, PARTNO, SERIALNO, HWLEVEL
+                       MANAGEMENT_MODULE : BAY, UUID, PARTNO, SERIALNO, HWLEVEL, ISPRIMARY (default=0)
+                                           contained tags : FIRMWARE, attributes: TYPE, BUILDID, REVISION, RELEASEDATE
+                       SWITCH_MODULE     : BAY, UUID, PARTNO, SERIALNO, HWLEVEL, SWITCH_TYPE, MFGID
+                                           contained tags : FIRMWARE, attributes: TYPE,  BUILDID, REVISION, RELEASEDATE
+                       BLADE             : BAY, UUID, PARTNO, SERIALNO, HWLEVEL, MACHTYPE, MACHMODEL, MFGID, WIDTH (default=1), NUM_MACS,
+                                           SAVE, CAPPING, PCAPMIN, PCAPMAX
+                                           contained tags : MAC, attribute ID
+                                                            FIRMWARE, attributes: TYPE,  BUILDID, REVISION, RELEASEDATE
+                       expansion cards   : BAY, UUID, PARTNO, SERIALNO, HWLEVEL, EXPANSION_TYPE, MFGID, NUM_MACS
+                                           contained tags : MAC, attribute ID
+                       EXPANSION_UNIT    : UUID, PARTNO, SERIALNO
+                       ANCHOR_CARD       : BAY, UUID, PARTNO, SERIALNO
+                       SIDE_SCALE_CARD   : BAY, UUID, PARTNO, SERIALNO
+                       CPU               : BAY, UUID, PARTNO, SERIALNO, FAMILY, SPEED, CORES
+                       DIMM              : BAY, UUID, PARTNO, SERIALNO, SIZE
+            -->
+
+            <!-- Definition of the base classes (and their default attribute values) -->
+
+            <CLASS NAME="CHASSIS"                   TOPOLOGY_TYPE="1"/>
+            <CLASS NAME="MANAGEMENT_MODULE"         TOPOLOGY_TYPE="2"/>
+            <CLASS NAME="BLADE"                     TOPOLOGY_TYPE="3"  NUM_MACS="2" WIDTH="1"/>
+            <CLASS NAME="POWER_MODULE"              TOPOLOGY_TYPE="4"/>
+            <CLASS NAME="BLOWER_MODULE"             TOPOLOGY_TYPE="5"/>
+            <CLASS NAME="SWITCH_MODULE"             TOPOLOGY_TYPE="6"/>
+            <CLASS NAME="MEDIA_TRAY"                TOPOLOGY_TYPE="25"/>
+
+            <CLASS NAME="CPU"                       TOPOLOGY_TYPE="8"  SERIALNO="Not available" UUID="Not available" PARTNO="Not available"/>
+            <CLASS NAME="DIMM"                      TOPOLOGY_TYPE="11" SERIALNO="Not available" UUID="Not available" PARTNO="Not available"/>
+            <CLASS NAME="EXPANSION_UNIT"            TOPOLOGY_TYPE="14"/>
+            <CLASS NAME="LOW_SPEED_EXPANSION_CARD"  TOPOLOGY_TYPE="15"/>
+            <CLASS NAME="HIGH_SPEED_EXPANSION_CARD" TOPOLOGY_TYPE="16"/>
+            <CLASS NAME="ANCHOR_CARD"               TOPOLOGY_TYPE="22"/>
+            <CLASS NAME="SIDE_SCALE_CARD"           TOPOLOGY_TYPE="32" SERIALNO="Not available" UUID="Not available" PARTNO="Not available"/>
+
+            <!-- Definition of the common BladeCenter-H classes -->
+
+            <CLASS NAME="BC-H" PARENT="CHASSIS">
+                <CONSTRAINTS MANAGEMENT_MODULE="2"
+                             BLADE="14"
+                             POWER_MODULE="4"
+                             BLOWER_MODULE="2"
+                             SWITCH_MODULE="10"
+                             MEDIA_TRAY="1"
+                />
+            </CLASS>
+
+            <CLASS NAME="BC-H_REV3" PARENT="BC-H" PARTNO="41Y4864" MACHTYPE="8852" MACHMODEL="PHD" HWLEVEL="6"/>
+
+            <CLASS NAME="BC-H_POWER_MODULE" PARENT="POWER_MODULE" PARTNO="39Y7349" HWLEVEL="10"/>
+            <CLASS NAME="BC-H_BLOWER_MODULE" PARENT="BLOWER_MODULE" PARTNO="44E8110" HWLEVEL="5"/>
+            <CLASS NAME="BC-H_MEDIA_TRAY" PARENT="MEDIA_TRAY" HWLEVEL="6" SERIALNO="Not available" PARTNO="Not available"/>
+
+            <!-- QLogic 8GB 20-port fibre channel switch nodule -->
+            <CLASS NAME="QLOGIC_8GB_FC_SWITCH_MODULE" PARENT="SWITCH_MODULE" PARTNO="26R0883" SWITCH_TYPE="2" HWLEVEL="7" MFGID="QLGC IBM2">
+                <FIRMWARE TYPE="Main Application 1" BUILDID="BRFSM" RELEASEDATE="07/10/2009" REVISION="7a14"/>
+            </CLASS>
+
+            <!-- BNT 1GB 20-port ethernetl switch nodule -->
+            <CLASS NAME="BNT_1GB_ETH_SWITCH_MODULE" PARENT="SWITCH_MODULE" PARTNO="32R1866" SWITCH_TYPE="1" HWLEVEL="3" MFGID="NT IBM2">
+                <FIRMWARE TYPE="Boot ROM" BUILDID="WMZ11000" RELEASEDATE="03/20/2010" REVISION="0105"/>
+                <FIRMWARE TYPE="Main Application 1" BUILDID="WMZ11000" RELEASEDATE="03/20/2010" REVISION="0105"/>
+                <FIRMWARE TYPE="Main Application 2" BUILDID="WMZ11000" RELEASEDATE="03/20/2010" REVISION="0105"/>
+            </CLASS>
+
+            <!-- BNT 10GB 20-port ethernetl switch nodule -->
+            <CLASS NAME="BNT_10GB_ETH_SWITCH_MODULE" PARENT="SWITCH_MODULE" PARTNO="39Y9264" SWITCH_TYPE="20" HWLEVEL="13" MFGID="BNT IBM2">
+                <FIRMWARE TYPE="Boot ROM" BUILDID="WMJ01000" RELEASEDATE="05/14/2009" REVISION="0500"/>
+                <FIRMWARE TYPE="Main Application 1" BUILDID="WMJ01000" RELEASEDATE="05/14/2009" REVISION="0500"/>
+                <FIRMWARE TYPE="Main Application 2" BUILDID="WMJ01000" RELEASEDATE="05/14/2009" REVISION="0500"/>
+            </CLASS>
+
+            <!-- Management module -->
+            <CLASS NAME="BC-H_MANAGEMENT_MODULE" PARENT="MANAGEMENT_MODULE" PARTNO="39Y9659" HWLEVEL="4">
+                <FIRMWARE TYPE="AMM firmware" BUILDID="BPET54Q" RELEASEDATE="10/20/2010" REVISION="54"/>
+            </CLASS>
+
+            <!-- Definition of the standard zBX BladeCenter configuration class (derived from BC-H rev.3) -->
+            <CLASS NAME="zBX_BC" PARENT="BC-H_REV3">
+                <!-- power modules -->
+                <BC-H_POWER_MODULE/>
+                <BC-H_POWER_MODULE/>
+                <BC-H_POWER_MODULE/>
+                <BC-H_POWER_MODULE/>
+                <!-- blower modules -->
+                <BC-H_BLOWER_MODULE/>
+                <BC-H_BLOWER_MODULE/>
+                <!-- switch modules -->
+                <BNT_1GB_ETH_SWITCH_MODULE/>
+                <BNT_1GB_ETH_SWITCH_MODULE/>
+                <QLOGIC_8GB_FC_SWITCH_MODULE/>
+                <QLOGIC_8GB_FC_SWITCH_MODULE/>
+                <BNT_10GB_ETH_SWITCH_MODULE BAY="7"/>
+                <BNT_10GB_ETH_SWITCH_MODULE BAY="9"/>
+                <!-- management modules -->
+                <BC-H_MANAGEMENT_MODULE ISPRIMARY="1"/>
+                <BC-H_MANAGEMENT_MODULE/>
+                <!-- media tray -->
+                <BC-H_MEDIA_TRAY/>
+            </CLASS>
+
+            <!-- Definition of the the blade expansion card classes -->
+
+            <!-- QLogic 2-port 8GB fibre channel expansion card -->
+            <CLASS NAME="QLOGIC_FC_8GB_EXP" PARENT="LOW_SPEED_EXPANSION_CARD" PARTNO="41Y8583" HWLEVEL="3" MFGID="QLGC" EXPANSION_TYPE="2"/>
+
+            <!-- Broadcom 2-port 10GB ethernet expansion card -->
+            <CLASS NAME="BROADCOM_ETH_10G_EXP" PARENT="HIGH_SPEED_EXPANSION_CARD" PARTNO="26R0892" HWLEVEL="2" MFGID="BRCM" EXPANSION_TYPE="1" NUM_MACS="2"/>
+
+            <!-- Definition of the the HS22 blade class -->
+            <CLASS NAME="HS22" PARENT="BLADE" PARTNO="49Y5111" HWLEVEL="6" MFGID="IBM IBM2" MACHTYPE="7870" SAVE="false" CAPPING="true" PCAPMIN="100" PCAPMAX="200">
+                <CONSTRAINTS LOW_SPEED_EXPANSION_CARD="1"
+                             HIGH_SPEED_EXPANSION_CARD="1"
+                             CPU="2"
+                             DIMM="16"
+                             EXPANSION_UNIT="1"
+                />
+
+                <FIRMWARE TYPE="FW/BIOS" BUILDID="P9E126B" RELEASEDATE="06/12/2009" REVISION="1.03"/>
+                <FIRMWARE TYPE="Diagnostics" BUILDID="P94YT47A" RELEASEDATE="05/22/2009" REVISION="1.13"/>
+                <FIRMWARE TYPE="Blade Sys Mgmt Processor" BUILDID="YUOO32I" RELEASEDATE="" REVISION="1.05"/>
+            </CLASS>
+
+            <!-- Definition of the the ISAO blade class (derived from HS22 blade) -->
+
+            <CLASS NAME="ISAO" PARENT="HS22" MACHMODEL="PEL">
+                <QLOGIC_FC_8GB_EXP/>
+                <BROADCOM_ETH_10G_EXP/>
+            </CLASS>
+
+            <!-- Definition of the zBX ISAO BladeCenter configuration class (derived from zBX BC) -->
+            <CLASS NAME="BC_ISAO" PARENT="zBX_BC">
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+                <ISAO/>
+            </CLASS>
+
+            <!-- Definition of the the BPE4 expansion unit for HS22 blades -->
+
+            <CLASS NAME="BPE4" PARENT="EXPANSION_UNIT" PARTNO="68Y7443" UUID="Not available" HWLEVEL="0" MFGID="DCT">
+                <CONSTRAINTS HIGH_SPEED_EXPANSION_CARD="1"/>
+            </CLASS>
+
+            <CLASS NAME="DP_EXPANSION" PARENT="BPE4">
+                <BROADCOM_ETH_10G_EXP/>
+            </CLASS>
+
+            <!-- Definition of the the Datapower blade class (derived from HS22 blade) -->
+
+            <CLASS NAME="DATAPOWER" PARENT="HS22" MACHTYPE="4195" MACHMODEL="4BX" WIDTH="2">
+
+                <FIRMWARE TYPE="FW/BIOS" BUILDID="FSE147T" RELEASEDATE="03/05/2010" REVISION="1.00"/>
+                <FIRMWARE TYPE="Diagnostics" BUILDID="DSYT55B" RELEASEDATE="01/16/2010" REVISION="3.00"/>
+                <FIRMWARE TYPE="Blade Sys Mgmt Processor" BUILDID="YUOO62A" RELEASEDATE="" REVISION="1.10"/>
+
+                <DP_EXPANSION/>
+            </CLASS>
+
+            <!-- Definition of the the xASB blade daughter FRU classes -->
+
+            <!-- Westmere CPU -->
+            <CLASS NAME="INTEL_X7560" PARENT="CPU" FAMILY="Intel Xeon" SPEED="2266 MHz" CORES="8"/>
+
+            <!-- DIMMs -->
+            <CLASS NAME="DIMM_4GB" PARENT="DIMM" SIZE="4"/>
+            <CLASS NAME="DIMM_8GB" PARENT="DIMM" SIZE="8"/>
+            <CLASS NAME="DIMM_16GB" PARENT="DIMM" SIZE="16"/>
+
+            <!-- HX5 SSD expansion card -->
+            <CLASS NAME="HX5_SSD_EXPANSION" PARENT="HIGH_SPEED_EXPANSION_CARD" BAY="2" PARTNO="46M6909" HWLEVEL="4" MFGID="IBM" EXPANSION_TYPE="13"/>
+
+            <!-- HX5 1-node speed burst option -->
+            <CLASS NAME="HX5_1NODE_SPEED_BURST" PARENT="SIDE_SCALE_CARD" MFGID="IBM"/>
+
+            <!-- Definition of the the HX5 blade class -->
+
+            <CLASS NAME="HX5" PARENT="BLADE" PARTNO="46M6985" MACHTYPE="7872" MACHMODEL="84Y" HWLEVEL="8" MFGID="IBM IBM2"
+                   SAVE="true" CAPPING="true" PCAPMIN="100" PCAPMAX="200">
+
+                <CONSTRAINTS LOW_SPEED_EXPANSION_CARD="1"
+                             HIGH_SPEED_EXPANSION_CARD="2"
+                             CPU="2"
+                             DIMM="16"
+                             SIDE_SCALE_CARD="1"
+                />
+
+                <FIRMWARE TYPE="FW/BIOS" BUILDID="HIE141TUS" RELEASEDATE="02/21/2011" REVISION="1.40"/>
+                <FIRMWARE TYPE="Diagnostics" BUILDID="DSYT85I" RELEASEDATE="02/03/2011" REVISION="3.40"/>
+                <FIRMWARE TYPE="Blade Sys Mgmt Processor" BUILDID="YUOOA2A" RELEASEDATE="" REVISION="1.26"/>
+                <FIRMWARE TYPE="FPGA" BUILDID="HIUD30C" RELEASEDATE="01/26/2011" REVISION="2.00"/>
+
+                <INTEL_X7560/>
+                <INTEL_X7560/>
+
+            </CLASS>
+
+            <!-- Definition of the the xASB blade class (derived from HX5) -->
+
+            <CLASS NAME="xASB" PARENT="HX5">
+                <QLOGIC_FC_8GB_EXP/>
+                <BROADCOM_ETH_10G_EXP/>
+                <HX5_SSD_EXPANSION/>
+                <HX5_1NODE_SPEED_BURST/>
+            </CLASS>
+
+            <!-- Definition of the the 64GB xASB blade class (derived from xASB) -->
+
+            <CLASS NAME="xASB_64GB" PARENT="xASB">
+                <DIMM_8GB BAY="1"/>
+                <DIMM_8GB BAY="4"/>
+                <DIMM_8GB BAY="5"/>
+                <DIMM_8GB BAY="8"/>
+                <DIMM_8GB BAY="9"/>
+                <DIMM_8GB BAY="12"/>
+                <DIMM_8GB BAY="13"/>
+                <DIMM_8GB BAY="16"/>
+            </CLASS>
+
+            <!-- Definition of the the 128GB xASB blade class (derived from xASB) -->
+
+            <CLASS NAME="xASB_128GB" PARENT="xASB">
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+            </CLASS>
+
+            <!-- Definition of the the 192GB xASB blade class (derived from xASB) -->
+
+            <CLASS NAME="xASB_192GB" PARENT="xASB_64GB">
+                <DIMM_16GB BAY="2"/>
+                <DIMM_16GB BAY="3"/>
+                <DIMM_16GB BAY="6"/>
+                <DIMM_16GB BAY="7"/>
+                <DIMM_16GB BAY="10"/>
+                <DIMM_16GB BAY="11"/>
+                <DIMM_16GB BAY="14"/>
+                <DIMM_16GB BAY="15"/>
+            </CLASS>
+
+            <!-- Definition of the the 256GB xASB blade class (derived from xASB) -->
+
+            <CLASS NAME="xASB_256GB" PARENT="xASB">
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+                <DIMM_16GB/>
+            </CLASS>
+
+            <!-- Definition of the the p-Blade expansion card classes -->
+
+            <!-- QLogic 2-port 10GB ethernet expansion card -->
+            <CLASS NAME="QLOGIC_ETH_10G_EXP" PARENT="HIGH_SPEED_EXPANSION_CARD" PARTNO="42C1832" HWLEVEL="0" MFGID="QLGC" EXPANSION_TYPE="12" NUM_MACS="2"/>
+
+            <!-- p-Blade security anchor card -->
+            <CLASS NAME="P_SEC_ANCHOR_CARD" PARENT="ANCHOR_CARD" PARTNO="07P6897" HWLEVEL="0" MFGID="IBM"/>
+
+            <!-- Definition of the the p-blade daughter FRU classes -->
+
+            <!-- p7 CPU class -->
+            <CLASS NAME="P7" PARENT="CPU" FAMILY="IBM Power7" SPEED="3.0 Ghz" CORES="8"/>
+
+            <!-- Definition of the P701 blade class -->
+
+            <CLASS NAME="P701" PARENT="BLADE" PARTNO="49Y5111" MACHTYPE="8406" MACHMODEL="71Y" HWLEVEL="6" MFGID="IBM IBM2" NUM_MACS="16"
+                   SAVE="true" CAPPING="true" PCAPMIN="100" PCAPMAX="200">
+
+                <CONSTRAINTS LOW_SPEED_EXPANSION_CARD="1"
+                             HIGH_SPEED_EXPANSION_CARD="1"
+                             CPU="8"
+                             DIMM="16"
+                             ANCHOR_CARD="1"
+                />
+
+                <FIRMWARE TYPE="FW/BIOS" BUILDID="AA710_098" RELEASEDATE="10/07/2010" REVISION="1050"/>
+                <FIRMWARE TYPE="Blade Sys Mgmt Processor" BUILDID="BOBT001" RELEASEDATE="" REVISION="7.12"/>
+
+                <P7/>
+                <P7/>
+                <P7/>
+                <P7/>
+                <P7/>
+                <P7/>
+                <P7/>
+                <P7/>
+                <P_SEC_ANCHOR_CARD/>
+            </CLASS>
+
+            <!-- Definition of the base pASB blade class (derived from P701) -->
+
+            <CLASS NAME="pASB" PARENT="P701">
+                <QLOGIC_FC_8GB_EXP/>
+                <QLOGIC_ETH_10G_EXP/>
+            </CLASS>
+
+            <!-- Definition of the 32GB pASB blade class (derived from pASB) -->
+
+            <CLASS NAME="pASB_32GB" PARENT="pASB">
+                <DIMM_4GB BAY="1"/>
+                <DIMM_4GB BAY="3"/>
+                <DIMM_4GB BAY="6"/>
+                <DIMM_4GB BAY="8"/>
+                <DIMM_4GB BAY="9"/>
+                <DIMM_4GB BAY="11"/>
+                <DIMM_4GB BAY="14"/>
+                <DIMM_4GB BAY="16"/>
+            </CLASS>
+
+            <!-- Definition of the 40GB pASB blade class (derived from pASB_32GB) -->
+
+            <CLASS NAME="pASB_40GB" PARENT="pASB_32GB">
+                <DIMM_4GB BAY="2"/>
+                <DIMM_4GB BAY="4"/>
+            </CLASS>
+
+            <!-- Definition of the 48GB pASB blade class (derived from pASB_40GB) -->
+
+            <CLASS NAME="pASB_48GB" PARENT="pASB_40GB">
+                <DIMM_4GB BAY="5"/>
+                <DIMM_4GB BAY="7"/>
+            </CLASS>
+
+            <!-- Definition of the 56GB pASB blade class (derived from pASB_48GB) -->
+
+            <CLASS NAME="pASB_56GB" PARENT="pASB_48GB">
+                <DIMM_4GB BAY="13"/>
+                <DIMM_4GB BAY="15"/>
+            </CLASS>
+
+            <!-- Definition of the 64GB pASB blade class (derived from pASB_48GB) -->
+
+            <CLASS NAME="pASB_64GB" PARENT="pASB">
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+                <DIMM_4GB/>
+            </CLASS>
+
+            <!-- Definition of the 128GB pASB blade class (derived from pASB) -->
+
+            <CLASS NAME="pASB_128GB" PARENT="pASB">
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+                <DIMM_8GB/>
+            </CLASS>
+
+        </CLASSES>
+
+        <!-- ******************************************************************************************************** -->
+
+        <CONFIGURATION>
+
+            <!-- 1st ISAO BladeCenter -->
+            <BC_ISAO SERIALNO="99C0001"/>
+
+            <!-- 2nd ISAO BladeCenter -->
+            <BC_ISAO SERIALNO="99C0002"/>
+
+            <!-- 3rd ISAO BladeCenter -->
+            <BC_ISAO SERIALNO="99C0003"/>
+
+            <!-- 4th ISAO BladeCenter -->
+            <BC_ISAO SERIALNO="99C0004"/>
+
+            <!-- Datapower only BladeCenter -->
+            <zBX_BC SERIALNO="99C0005">
+                <DATAPOWER/>
+                <DATAPOWER/>
+                <DATAPOWER/>
+                <DATAPOWER/>
+                <DATAPOWER/>
+                <DATAPOWER/>
+                <DATAPOWER/>
+            </zBX_BC>
+
+            <!-- xASB only BladeCenter -->
+            <zBX_BC SERIALNO="99C0006">
+                <xASB_64GB/>
+                <xASB_64GB/>
+                <xASB_64GB/>
+                <xASB_128GB/>
+                <xASB_128GB/>
+                <xASB_128GB/>
+                <xASB_192GB/>
+                <xASB_192GB/>
+                <xASB_192GB/>
+                <xASB_192GB/>
+                <xASB_256GB/>
+                <xASB_256GB/>
+                <xASB_256GB/>
+                <xASB_256GB/>
+            </zBX_BC>
+
+            <!-- pASB only BladeCenter -->
+            <zBX_BC SERIALNO="99C0007">
+                <pASB_32GB/>
+                <pASB_32GB/>
+                <pASB_64GB/>
+                <pASB_64GB/>
+                <pASB_64GB/>
+                <pASB_64GB/>
+                <pASB_64GB/>
+                <pASB_64GB/>
+                <pASB_128GB/>
+                <pASB_128GB/>
+                <pASB_128GB/>
+                <pASB_128GB/>
+                <pASB_128GB/>
+                <pASB_128GB/>
+            </zBX_BC>
+
+            <!-- mixed Datapower, xASB, and pASB BladeCenter -->
+            <zBX_BC SERIALNO="99C0008">
+                <DATAPOWER/>
+                <DATAPOWER/>
+                <DATAPOWER/>
+                <xASB_256GB/>
+                <xASB_256GB/>
+                <xASB_256GB/>
+                <xASB_256GB/>
+                <pASB_128GB/>
+                <pASB_128GB/>
+                <pASB_128GB/>
+                <pASB_128GB>
+                    <!--
+
+                    <MAC ID="00:AB:CD:EF:00:10"/>
+                    <MAC ID="00:AB:CD:EF:00:11"/>
+                    <MAC ID="00:AB:CD:EF:00:12"/>
+                    <MAC ID="00:AB:CD:EF:00:13"/>
+                    <MAC ID="00:AB:CD:EF:00:14"/>
+                    <MAC ID="00:AB:CD:EF:00:15"/>
+                    <MAC ID="00:AB:CD:EF:00:16"/>
+                    <MAC ID="00:AB:CD:EF:00:17"/>
+                    <MAC ID="00:AB:CD:EF:00:18"/>
+                    <MAC ID="00:AB:CD:EF:00:19"/>
+                    <MAC ID="00:AB:CD:EF:00:1A"/>
+                    <MAC ID="00:AB:CD:EF:00:1B"/>
+                    <MAC ID="00:AB:CD:EF:00:1C"/>
+                    <MAC ID="00:AB:CD:EF:00:1D"/>
+                    <MAC ID="00:AB:CD:EF:00:1E"/>
+                    <MAC ID="00:AB:CD:EF:00:1F"/>
+
+                    -->
+                </pASB_128GB>
+            </zBX_BC>
+
+        </CONFIGURATION>
+
+    </BLADECENTER_CONFIGURATION>
+
+    <SWITCH_CONFIGURATION>
+
+        <CLASSES>
+
+            <!--
+                   This section contains the definition of all classes used by the CONFIGURATION section below
+
+                   Serial numbers and MAC addresses are automatically created unless explicitly defined here
+
+                   All classes defined must be derived from the TOR_SWITCH base class
+
+                   valid attributes are : SERIALNO, IFNAME, NUM_MACS
+                                          contained tags : MAC, attributes : ID
+            -->
+
+            <!-- Definition of the base classes (and their default attribute values) -->
+
+            <CLASS NAME="TOR_SWITCH" NUM_MACS="1"/>
+
+            <!-- Definition of the derived classes -->
+
+            <CLASS NAME="EX_4200" PARENT="TOR_SWITCH" IFNAME="ge-0/0/47.0"/>
+
+            <CLASS NAME="EX_4500" PARENT="TOR_SWITCH" IFNAME="vme.0"/>
+
+        </CLASSES>
+
+        <CONFIGURATION>
+
+            <!-- PSN TOR switch configuration -->
+            <EX_4200/>
+            <EX_4200/>
+
+            <!-- PDN TOR switch configuration -->
+            <EX_4500/>
+            <EX_4500/>
+
+        </CONFIGURATION>
+
+    </SWITCH_CONFIGURATION>
+
+</HYBRID_CONFIGURATION>

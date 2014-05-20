@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="b10ea4b0-dc8a-4612-9afd-c8d0e01973dc" name="oelsnerc@BR8GGW30 2012-04-02 16:44:08" runUser="BR8GGW30\oelsnerc" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2006">
+  <TestRunConfiguration name="Lokaler Testlauf" id="846b00a8-352c-4d73-85bd-33ca1656187d">
+    <Description>Dies ist eine standardmäßige Testlaufkonfiguration für einen lokalen Testlauf.</Description>
+    <Deployment runDeploymentRoot="E:\Work\MySVN\C#\MMC-Ideas\TestResults\oelsnerc_BR8GGW30 2012-04-02 16_44_08">
+      <DeploymentItem filename="E:\Work\MySVN\C#\MMC-Ideas\Calc\bin\Debug\Calc.exe" />
+    </Deployment>
+    <TestTypeSpecific />
+  </TestRunConfiguration>
+  <ResultSummary outcome="Failed">
+    <Counters total="23" executed="23" passed="18" error="0" failed="3" timeout="0" aborted="0" inconclusive="2" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <Times creation="2012-04-02T16:44:08.2446091+02:00" queuing="2012-04-02T16:44:10.4164841+02:00" start="2012-04-02T16:44:10.5883591+02:00" finish="2012-04-02T16:44:44.7602341+02:00" />
+  <TestDefinitions>
+    <UnitTest name="ShiftRightTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="009afe1f-1927-cb75-3f47-f82dea3b4c39">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="c3b312ca-5368-4161-af56-e80e8d8923b4" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="ShiftRightTest" />
+    </UnitTest>
+    <UnitTest name="negTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="8b8fc77b-12e2-98c6-ef1d-17ab2701e689">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="b4a1f95c-61c9-4cb4-a3e3-c822a05e23eb" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="negTest" />
+    </UnitTest>
+    <UnitTest name="mulTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="9b91d7cd-164f-6b19-6765-8349560f6812">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="ed937160-ab5f-482d-abe9-24691d5ee209" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="mulTest" />
+    </UnitTest>
+    <UnitTest name="divTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="ffdfaf5d-759a-0338-92fe-bc5724d68c5e">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="94557e75-1398-4a26-a93c-804cbb8bf77c" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="divTest" />
+    </UnitTest>
+    <UnitTest name="CloneTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="fb9caa6d-a3a2-ada8-1034-7a909ef89817">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="e1f6e30d-3a1c-4421-b6da-a0aaac45a078" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="CloneTest" />
+    </UnitTest>
+    <UnitTest name="AdditionTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="e4e12119-43c3-4d67-5a1a-4bec7e5052dc">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="10f5a229-b479-496e-8e96-96c3ed405eda" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="AdditionTest" />
+    </UnitTest>
+    <UnitTest name="remTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="2b255622-6ed1-c94a-2325-33dc0afd200f">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="c63e15b5-8422-4fdd-b01a-ed911c530eb6" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="remTest" />
+    </UnitTest>
+    <UnitTest name="EqualsTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="4bcec213-4468-b0fe-65d8-6378059c4a4a">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="7c2161a4-6835-4da5-b398-924fac27c19b" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="EqualsTest" />
+    </UnitTest>
+    <UnitTest name="AsIntegerTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="af2285b6-84ef-cdee-cbad-eb740e3f5962">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="df27e703-b2d3-4acd-a81e-7a722c8787ae" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="AsIntegerTest" />
+    </UnitTest>
+    <UnitTest name="AdditionTest1" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="6641005c-81d2-260e-6ebd-114b93e3676f">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="075483cd-e0b9-47dc-8d77-0a5896df51b5" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="AdditionTest1" />
+    </UnitTest>
+    <UnitTest name="MultiplyTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="523a4f7c-f3b0-aa87-4f9b-4eded8be3aa5">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="46454f1d-0870-4d86-8069-3a70de2577e0" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="MultiplyTest" />
+    </UnitTest>
+    <UnitTest name="FromStringTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="2aff6bae-9594-b830-e715-12a900bf4367">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="c3b48485-dcb3-436f-b1c6-4c4e4a4ce08e" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="FromStringTest" />
+    </UnitTest>
+    <UnitTest name="IsNegativeTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="42f9bdf2-e2fb-9404-11f4-f1b89e1222dd">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="7da9d1d2-45f4-42ca-bdab-33be66bbadf1" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="IsNegativeTest" />
+    </UnitTest>
+    <UnitTest name="ShiftLeftTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="3597941c-fac5-3fa8-c6f9-2d6a6f520ac4">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="714aae0f-5603-42d4-9b11-5dbc185d65a5" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="ShiftLeftTest" />
+    </UnitTest>
+    <UnitTest name="InsertTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="a1cef317-805a-1746-5339-42fa7be92a70">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="564acf7c-049e-4745-bf3a-6b9067d1eabe" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="InsertTest" />
+    </UnitTest>
+    <UnitTest name="TrimTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="7b2d6774-6381-fd58-8dcd-951c568fffbd">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="5cb9064f-2829-4a9d-ae76-a3d537b8a2d8" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="TrimTest" />
+    </UnitTest>
+    <UnitTest name="DivideTest2" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="9f997afd-30e2-db81-8ecf-e4645072e24e">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="454bb738-87f7-47c5-9f5c-7efd0b0daaf0" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="DivideTest2" />
+    </UnitTest>
+    <UnitTest name="powTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="834a795e-00fc-941f-aeec-bdab9a1b249a">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="ab8e0e60-904e-4e28-8058-0b9d80597c1e" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="powTest" />
+    </UnitTest>
+    <UnitTest name="ToStringTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="36e15525-89aa-07bf-5879-96b0dfc13935">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="99a454eb-bf49-4e65-8c00-5ab62dd09c3d" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="ToStringTest" />
+    </UnitTest>
+    <UnitTest name="NotTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="3c2505aa-2bc3-60e2-30d6-c395a1cc300a">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="d12ad138-4aca-4046-9808-be52c15c08af" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="NotTest" />
+    </UnitTest>
+    <UnitTest name="DivideTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="2a4d9670-9030-db6c-ea27-56d1e25a2387">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="abd89df5-9c3e-4cc6-82e6-760679eb1798" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="DivideTest" />
+    </UnitTest>
+    <UnitTest name="IsZeroTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="49b542cf-da03-8dd7-f666-4aee688221f5">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <Execution id="fee1e61d-71c9-41d4-9513-0d25c31706be" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="IsZeroTest" />
+    </UnitTest>
+    <UnitTest name="SubtractionTest" storage="e:\work\mysvn\c#\mmc-ideas\cnumber_test\bin\debug\cnumber_test.dll" id="c7368728-c113-e94c-f618-cff279cee92e">
+      <Css projectStructure="" iteration="" />
+      <Owners>
+        <Owner name="" />
+      </Owners>
+      <DeploymentItems>
+        <DeploymentItem filename="Calc.exe" />
+      </DeploymentItems>
+      <Execution id="3c03ceb0-64fe-4386-beb7-ba41f4855fce" />
+      <TestMethod codeBase="E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\bin\Debug\CNumber_Test.dll" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="CNumber_Test.CNumber_IntegerTest, CNumber_Test" name="SubtractionTest" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Nicht in einer Liste enthaltene Ergebnisse" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="Alle geladenen Ergebnisse" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="49b542cf-da03-8dd7-f666-4aee688221f5" executionId="fee1e61d-71c9-41d4-9513-0d25c31706be" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="42f9bdf2-e2fb-9404-11f4-f1b89e1222dd" executionId="7da9d1d2-45f4-42ca-bdab-33be66bbadf1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af2285b6-84ef-cdee-cbad-eb740e3f5962" executionId="df27e703-b2d3-4acd-a81e-7a722c8787ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b2d6774-6381-fd58-8dcd-951c568fffbd" executionId="5cb9064f-2829-4a9d-ae76-a3d537b8a2d8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2aff6bae-9594-b830-e715-12a900bf4367" executionId="c3b48485-dcb3-436f-b1c6-4c4e4a4ce08e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="36e15525-89aa-07bf-5879-96b0dfc13935" executionId="99a454eb-bf49-4e65-8c00-5ab62dd09c3d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7368728-c113-e94c-f618-cff279cee92e" executionId="3c03ceb0-64fe-4386-beb7-ba41f4855fce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="009afe1f-1927-cb75-3f47-f82dea3b4c39" executionId="c3b312ca-5368-4161-af56-e80e8d8923b4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3597941c-fac5-3fa8-c6f9-2d6a6f520ac4" executionId="714aae0f-5603-42d4-9b11-5dbc185d65a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3c2505aa-2bc3-60e2-30d6-c395a1cc300a" executionId="d12ad138-4aca-4046-9808-be52c15c08af" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b8fc77b-12e2-98c6-ef1d-17ab2701e689" executionId="b4a1f95c-61c9-4cb4-a3e3-c822a05e23eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="523a4f7c-f3b0-aa87-4f9b-4eded8be3aa5" executionId="46454f1d-0870-4d86-8069-3a70de2577e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9b91d7cd-164f-6b19-6765-8349560f6812" executionId="ed937160-ab5f-482d-abe9-24691d5ee209" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1cef317-805a-1746-5339-42fa7be92a70" executionId="564acf7c-049e-4745-bf3a-6b9067d1eabe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4bcec213-4468-b0fe-65d8-6378059c4a4a" executionId="7c2161a4-6835-4da5-b398-924fac27c19b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2a4d9670-9030-db6c-ea27-56d1e25a2387" executionId="abd89df5-9c3e-4cc6-82e6-760679eb1798" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ffdfaf5d-759a-0338-92fe-bc5724d68c5e" executionId="94557e75-1398-4a26-a93c-804cbb8bf77c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fb9caa6d-a3a2-ada8-1034-7a909ef89817" executionId="e1f6e30d-3a1c-4421-b6da-a0aaac45a078" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6641005c-81d2-260e-6ebd-114b93e3676f" executionId="075483cd-e0b9-47dc-8d77-0a5896df51b5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e4e12119-43c3-4d67-5a1a-4bec7e5052dc" executionId="10f5a229-b479-496e-8e96-96c3ed405eda" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f997afd-30e2-db81-8ecf-e4645072e24e" executionId="454bb738-87f7-47c5-9f5c-7efd0b0daaf0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2b255622-6ed1-c94a-2325-33dc0afd200f" executionId="c63e15b5-8422-4fdd-b01a-ed911c530eb6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="834a795e-00fc-941f-aeec-bdab9a1b249a" executionId="ab8e0e60-904e-4e28-8058-0b9d80597c1e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="fee1e61d-71c9-41d4-9513-0d25c31706be" testId="49b542cf-da03-8dd7-f666-4aee688221f5" testName="IsZeroTest" computerName="BR8GGW30" duration="00:00:00.0302951" startTime="2012-04-02T16:44:10.7133591+02:00" endTime="2012-04-02T16:44:11.4164841+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7da9d1d2-45f4-42ca-bdab-33be66bbadf1" testId="42f9bdf2-e2fb-9404-11f4-f1b89e1222dd" testName="IsNegativeTest" computerName="BR8GGW30" duration="00:00:00.0003201" startTime="2012-04-02T16:44:11.4321091+02:00" endTime="2012-04-02T16:44:11.4321091+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="df27e703-b2d3-4acd-a81e-7a722c8787ae" testId="af2285b6-84ef-cdee-cbad-eb740e3f5962" testName="AsIntegerTest" computerName="BR8GGW30" duration="00:00:00.0026277" startTime="2012-04-02T16:44:11.4477341+02:00" endTime="2012-04-02T16:44:11.4477341+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5cb9064f-2829-4a9d-ae76-a3d537b8a2d8" testId="7b2d6774-6381-fd58-8dcd-951c568fffbd" testName="TrimTest" computerName="BR8GGW30" duration="00:00:00.1295645" startTime="2012-04-02T16:44:11.4633591+02:00" endTime="2012-04-02T16:44:11.6039841+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c3b48485-dcb3-436f-b1c6-4c4e4a4ce08e" testId="2aff6bae-9594-b830-e715-12a900bf4367" testName="FromStringTest" computerName="BR8GGW30" duration="00:00:00.0066097" startTime="2012-04-02T16:44:11.6039841+02:00" endTime="2012-04-02T16:44:11.6196091+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="99a454eb-bf49-4e65-8c00-5ab62dd09c3d" testId="36e15525-89aa-07bf-5879-96b0dfc13935" testName="ToStringTest" computerName="BR8GGW30" duration="00:00:00.0008157" startTime="2012-04-02T16:44:11.6196091+02:00" endTime="2012-04-02T16:44:11.6196091+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3c03ceb0-64fe-4386-beb7-ba41f4855fce" testId="c7368728-c113-e94c-f618-cff279cee92e" testName="SubtractionTest" computerName="BR8GGW30" duration="00:00:00.0026576" startTime="2012-04-02T16:44:11.6196091+02:00" endTime="2012-04-02T16:44:11.6352341+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c3b312ca-5368-4161-af56-e80e8d8923b4" testId="009afe1f-1927-cb75-3f47-f82dea3b4c39" testName="ShiftRightTest" computerName="BR8GGW30" duration="00:00:00.0015365" startTime="2012-04-02T16:44:11.6352341+02:00" endTime="2012-04-02T16:44:11.6352341+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="714aae0f-5603-42d4-9b11-5dbc185d65a5" testId="3597941c-fac5-3fa8-c6f9-2d6a6f520ac4" testName="ShiftLeftTest" computerName="BR8GGW30" duration="00:00:32.7862141" startTime="2012-04-02T16:44:11.6508591+02:00" endTime="2012-04-02T16:44:44.4008591+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.AreEqual failed. Expected:&lt;1&gt;. Actual:&lt;0&gt;. </Message>
+          <StackTrace>   at CNumber_Test.CNumber_IntegerTest.ShiftLeftTest() in E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\CNumber_IntegerTest.cs:line 203
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d12ad138-4aca-4046-9808-be52c15c08af" testId="3c2505aa-2bc3-60e2-30d6-c395a1cc300a" testName="NotTest" computerName="BR8GGW30" duration="00:00:00.0096121" startTime="2012-04-02T16:44:44.4321091+02:00" endTime="2012-04-02T16:44:44.4477341+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Inconclusive" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Inconclusive failed. Eine Methode, die keinen Wert zurückgibt, kann nicht überprüft werden.</Message>
+          <StackTrace>   at CNumber_Test.CNumber_IntegerTest.NotTest() in E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\CNumber_IntegerTest.cs:line 215
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b4a1f95c-61c9-4cb4-a3e3-c822a05e23eb" testId="8b8fc77b-12e2-98c6-ef1d-17ab2701e689" testName="negTest" computerName="BR8GGW30" duration="00:00:00.0092975" startTime="2012-04-02T16:44:44.4477341+02:00" endTime="2012-04-02T16:44:44.4633591+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.AreEqual failed. Expected:&lt;(null)&gt;. Actual:&lt;MMC.Numbers.CNumber_Integer&gt;. </Message>
+          <StackTrace>   at CNumber_Test.CNumber_IntegerTest.negTest() in E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\CNumber_IntegerTest.cs:line 228
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="46454f1d-0870-4d86-8069-3a70de2577e0" testId="523a4f7c-f3b0-aa87-4f9b-4eded8be3aa5" testName="MultiplyTest" computerName="BR8GGW30" duration="00:00:00.0006137" startTime="2012-04-02T16:44:44.4789841+02:00" endTime="2012-04-02T16:44:44.4789841+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ed937160-ab5f-482d-abe9-24691d5ee209" testId="9b91d7cd-164f-6b19-6765-8349560f6812" testName="mulTest" computerName="BR8GGW30" duration="00:00:00.0011414" startTime="2012-04-02T16:44:44.4789841+02:00" endTime="2012-04-02T16:44:44.4946091+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="564acf7c-049e-4745-bf3a-6b9067d1eabe" testId="a1cef317-805a-1746-5339-42fa7be92a70" testName="InsertTest" computerName="BR8GGW30" duration="00:00:00.0132044" startTime="2012-04-02T16:44:44.4946091+02:00" endTime="2012-04-02T16:44:44.5102341+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Inconclusive" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Inconclusive failed. Eine Methode, die keinen Wert zurückgibt, kann nicht überprüft werden.</Message>
+          <StackTrace>   at CNumber_Test.CNumber_IntegerTest.InsertTest() in E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\CNumber_IntegerTest.cs:line 269
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7c2161a4-6835-4da5-b398-924fac27c19b" testId="4bcec213-4468-b0fe-65d8-6378059c4a4a" testName="EqualsTest" computerName="BR8GGW30" duration="00:00:00.0012375" startTime="2012-04-02T16:44:44.5258591+02:00" endTime="2012-04-02T16:44:44.5258591+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="abd89df5-9c3e-4cc6-82e6-760679eb1798" testId="2a4d9670-9030-db6c-ea27-56d1e25a2387" testName="DivideTest" computerName="BR8GGW30" duration="00:00:00.0012420" startTime="2012-04-02T16:44:44.5258591+02:00" endTime="2012-04-02T16:44:44.5414841+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="94557e75-1398-4a26-a93c-804cbb8bf77c" testId="ffdfaf5d-759a-0338-92fe-bc5724d68c5e" testName="divTest" computerName="BR8GGW30" duration="00:00:00.0011641" startTime="2012-04-02T16:44:44.5414841+02:00" endTime="2012-04-02T16:44:44.5414841+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e1f6e30d-3a1c-4421-b6da-a0aaac45a078" testId="fb9caa6d-a3a2-ada8-1034-7a909ef89817" testName="CloneTest" computerName="BR8GGW30" duration="00:00:00.0002050" startTime="2012-04-02T16:44:44.5414841+02:00" endTime="2012-04-02T16:44:44.5571091+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="075483cd-e0b9-47dc-8d77-0a5896df51b5" testId="6641005c-81d2-260e-6ebd-114b93e3676f" testName="AdditionTest1" computerName="BR8GGW30" duration="00:00:00.0006322" startTime="2012-04-02T16:44:44.5571091+02:00" endTime="2012-04-02T16:44:44.5571091+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="10f5a229-b479-496e-8e96-96c3ed405eda" testId="e4e12119-43c3-4d67-5a1a-4bec7e5052dc" testName="AdditionTest" computerName="BR8GGW30" duration="00:00:00.0025324" startTime="2012-04-02T16:44:44.5883591+02:00" endTime="2012-04-02T16:44:44.5883591+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="454bb738-87f7-47c5-9f5c-7efd0b0daaf0" testId="9f997afd-30e2-db81-8ecf-e4645072e24e" testName="DivideTest2" computerName="BR8GGW30" duration="00:00:00.0006092" startTime="2012-04-02T16:44:44.5883591+02:00" endTime="2012-04-02T16:44:44.6039841+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c63e15b5-8422-4fdd-b01a-ed911c530eb6" testId="2b255622-6ed1-c94a-2325-33dc0afd200f" testName="remTest" computerName="BR8GGW30" duration="00:00:00.0004849" startTime="2012-04-02T16:44:44.6039841+02:00" endTime="2012-04-02T16:44:44.6039841+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ab8e0e60-904e-4e28-8058-0b9d80597c1e" testId="834a795e-00fc-941f-aeec-bdab9a1b249a" testName="powTest" computerName="BR8GGW30" duration="00:00:00.0142962" startTime="2012-04-02T16:44:44.6039841+02:00" endTime="2012-04-02T16:44:44.6352341+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d">
+      <Output>
+        <ErrorInfo>
+          <Message>Test method CNumber_Test.CNumber_IntegerTest.powTest threw exception:  System.NotImplementedException: The method or operation is not implemented..</Message>
+          <StackTrace>    at MMC.Numbers.CNumber_Integer.pow(CNumber a) in E:\Work\MySVN\C#\MMC-Ideas\Calc\CNumber_Integer.cs:line 597
+   at CNumber_Test.CNumber_IntegerTest.powTest() in E:\Work\MySVN\C#\MMC-Ideas\CNumber_Test\CNumber_IntegerTest.cs:line 424
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>
