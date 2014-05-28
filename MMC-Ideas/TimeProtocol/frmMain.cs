@@ -14,131 +14,121 @@ namespace TimeProtocol
     public partial class frmMain : Form
     {
         //************************************************************
-        static string GetTimeStamp(DateTime dt)
-        {
-            //DateTime dt = DateTime.Now;
-            string ts = dt.ToString();
-            ts += ':';
-            ts += dt.Millisecond.ToString("D3");
-            return ts;
-        }
+        protected const string Registry_Key = "HKEY_CURRENT_USER\\Software\\MMC\\TimeProtocol";
+        protected const string Registry_FileName = "FileName";
 
-        //************************************************************
-        const int Height_Show = 473;
-        const int Height_Hide = 114;
+        protected Logger m_Log;
+        protected bool   m_Log_enabled;
+        protected string m_FileName;
 
-        protected string _FileName;
-        protected StreamWriter _FileStream;
-        protected bool _Log_enabled;
-        protected DateTime _Log_Last;
-        protected DateTime _Log_First;
         protected int _MouseDownX;
         protected int _MouseDownY;
 
+        //------------------------------------------------------------
         public frmMain()
         {
             InitializeComponent();
-            _FileName = null;
-            _FileStream = null;
-            _Log_enabled = false;
-            _Log_First = DateTime.MinValue;
-            _Log_Last = DateTime.MinValue;
+
+            m_Log = null;
+            m_FileName = null;
+            m_Log_enabled = false;
 
             ssdSeconds.Value = 0;
             ssdMinutes.Value = 0;
             ssdHours.Value = 0;
+        }
 
-            ssdLog_Seconds.Value = 0;
-            ssdLog_Minutes.Value = 0;
-            ssdLog_Hours.Value = 0;
-            
-            LogHide();
+        //------------------------------------------------------------
+        public bool canRun()
+        {
+            m_FileName = (string)Registry.GetValue(Registry_Key, Registry_FileName, null);
 
-            tmrClock.Enabled = true;
+            if (m_FileName == null)
+            {   // now let the user define the name
+                if (dlgFileSave.ShowDialog() == DialogResult.OK)
+                {
+                    m_FileName = dlgFileSave.FileName;
+                }
+            }
+
+            return (m_FileName != null);
         }
 
         //------------------------------------------------------------
         private void frmMain_Load(object sender, EventArgs e)
         {
+            setLogFile(m_FileName);
+
+            m_Log.log("Start");
             SystemEvents.PowerModeChanged += new PowerModeChangedEventHandler(SystemEvents_PowerModeChanged);
             SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
-        }
+            tmrClock.Enabled = true;
 
-        //************************************************************
-        protected void File_Open(string FileName)
-        {
-            _FileName = FileName;
-            _FileStream = File.AppendText(_FileName);
+            setLogEnabled(true);
         }
 
         //------------------------------------------------------------
-        protected void File_Close()
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_FileStream != null) _FileStream.Close();
-            _FileStream = null;
-            _FileName = null;
-        }
-        
-        //************************************************************
-        public void WriteText(string Text)
-        {
-            txtProtocol.AppendText(Text);
-            if (_FileStream != null)
+            m_Log.log("Close");
+            m_Log.Close();
+            if (m_FileName != null)
             {
-                _FileStream.Write(Text);
-                _FileStream.Flush();
+                Registry.SetValue(Registry_Key, Registry_FileName, m_FileName);
             }
+        }
+
+        //************************************************************
+        private void setLogFile(string FileName)
+        {
+            if (m_Log != null)
+            {
+                m_Log.log("continued in " + FileName);
+                m_Log.Close();
+            }
+            m_FileName = FileName;
+
+            m_Log = new Logger(m_FileName);
+            m_Log.log("Open");
         }
 
         //------------------------------------------------------------
-        public void Log(string Message)
+        public void setLogEnabled(bool Enabled)
         {
-            DateTime log = DateTime.Now;
-            if (_Log_Last.Date < log.Date)
+            if (Enabled)
             {
-                WriteText("*********************************************\n");
-                TimeSpan span = _Log_Last - _Log_First;
-                if (span.Seconds > 0)
-                {
-                    WriteText("TimeSpan: " + span.ToString() + '\n');
-                    WriteText("*********************************************\n");
-                }
-                _Log_First = log;
+                btnRun.ImageIndex = 1;
+                SystemTray.Text = "Time protocol: Started!";
+                m_Log.log("log enabled");
+                m_Log_enabled = true;
             }
-            WriteText(GetTimeStamp(log) + '\t' + Message + '\n');
-            _Log_Last = log;
-        }
-
-        public void LogHide()
-        {
-            this.Height = Height_Hide;
-            btnHide.Text = "ShowLog";
-        }
-
-        public void LogShow()
-        {
-            this.Height = Height_Show;
-            btnHide.Text = "HideLog";
+            else
+            {
+                btnRun.ImageIndex = 0;
+                SystemTray.Text = "Time protocol: Stopped!";
+                m_Log.log("log stopped");
+                m_Log_enabled = false;
+            }
         }
 
         //************************************************************
         public void SystemEvents_PowerModeChanged(Object sender, PowerModeChangedEventArgs e)
         {
-            if (_Log_enabled)
+            if (m_Log_enabled)
             {
                 switch (e.Mode)
                 {
                     case PowerModes.Resume:
-                        Log("Resume");
+                        m_Log.log("Resume");
                         break;
                     case PowerModes.StatusChange:
-                        // Log("PowerChange");  // ignore this one due to flooding
+                        // m_Log.log("PowerChange");  // ignore this one due to flooding
                         break;
                     case PowerModes.Suspend:
-                        Log("Suspend");
+                        m_Log.log("Suspend");
                         break;
                     default:
-                        Log("Unknown PowerModeChange event");
+                        m_Log.log("Unknown PowerModeChange event");
                         break;
                 }
             }
@@ -147,39 +137,39 @@ namespace TimeProtocol
         //------------------------------------------------------------
         public void SystemEvents_SessionSwitch(Object sender, SessionSwitchEventArgs e)
         {
-            if (_Log_enabled)
+            if (m_Log_enabled)
             {
                 switch (e.Reason)
                 {
                     case SessionSwitchReason.ConsoleConnect:
-                        Log("ConsoleConnect");
+                        m_Log.log("ConsoleConnect");
                         break;
                     case SessionSwitchReason.ConsoleDisconnect:
-                        Log("Console Disconnect");
+                        m_Log.log("Console Disconnect");
                         break;
                     case SessionSwitchReason.RemoteConnect:
-                        Log("RemoteConnect");
+                        m_Log.log("RemoteConnect");
                         break;
                     case SessionSwitchReason.RemoteDisconnect:
-                        Log("RemoteDisconnect");
+                        m_Log.log("RemoteDisconnect");
                         break;
                     case SessionSwitchReason.SessionLock:
-                        Log("SessionLock");
+                        m_Log.log("SessionLock");
                         break;
                     case SessionSwitchReason.SessionLogoff:
-                        Log("SessionLogoff");
+                        m_Log.log("SessionLogoff");
                         break;
                     case SessionSwitchReason.SessionLogon:
-                        Log("SessionLogon");
+                        m_Log.log("SessionLogon");
                         break;
                     case SessionSwitchReason.SessionRemoteControl:
-                        Log("SessionRemoteControl");
+                        m_Log.log("SessionRemoteControl");
                         break;
                     case SessionSwitchReason.SessionUnlock:
-                        Log("SessionUnlock");
+                        m_Log.log("SessionUnlock");
                         break;
                     default:
-                        Log("Unknown Session Switch event");
+                        m_Log.log("Unknown Session Switch event");
                         break;
                 }
             }
@@ -188,63 +178,17 @@ namespace TimeProtocol
         //------------------------------------------------------------
         private void btnRun_Click(object sender, EventArgs e)
         {
-            if (btnRun.ImageIndex == 0)
-            {
-                if (dlgFileSave.ShowDialog() == DialogResult.OK)
-                {
-                    File_Open(dlgFileSave.FileName);
-                    btnRun.ImageIndex = 1;
-                    Log("Started");
-                    _Log_enabled = true;
-                }
-            }
-            else
-            {
-                btnRun.ImageIndex = 0;
-                SystemTray.Text = "Time protocol: Stopped!";
-                Log("Stopped");
-                File_Close();
-                _Log_enabled = false;
-            }
-        }
-
-        //------------------------------------------------------------
-        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            File_Close();
+            setLogEnabled(btnRun.ImageIndex == 0);
         }
 
         //------------------------------------------------------------
         private void tmrClock_Tick(object sender, EventArgs e)
         {
-            DateTime log = DateTime.Now;
+            DateTime now = DateTime.Now;
 
-            ssdHours.Value = log.Hour;
-            ssdMinutes.Value = log.Minute;
-            ssdSeconds.Value = log.Second;
-
-            if (_Log_enabled)
-            {
-                TimeSpan Span = log - _Log_First;
-                ssdLog_Hours.Value = Span.Hours;
-                ssdLog_Minutes.Value = Span.Minutes;
-                ssdLog_Seconds.Value = Span.Seconds;
-
-                SystemTray.Text = String.Format("Time Protocol: {0:D2}:{1:D2}",Span.Hours,Span.Minutes);
-            };
-        }
-
-        //------------------------------------------------------------
-        private void btnHide_Click(object sender, EventArgs e)
-        {
-            if (this.Height == Height_Hide)
-            {
-                LogShow();
-            }
-            else
-            {
-                LogHide();
-            }
+            ssdHours.Value = now.Hour;
+            ssdMinutes.Value = now.Minute;
+            ssdSeconds.Value = now.Second;
         }
 
         //------------------------------------------------------------
@@ -265,6 +209,25 @@ namespace TimeProtocol
         {
             Show();
             this.WindowState = FormWindowState.Normal;
+        }
+
+        //************************************************************
+        // Menu items
+        //------------------------------------------------------------
+        private void mnuNewFile_Click(object sender, EventArgs e)
+        {
+            dlgFileSave.InitialDirectory = Path.GetDirectoryName(m_FileName);
+            dlgFileSave.FileName = Path.GetFileName(m_FileName);
+            if (dlgFileSave.ShowDialog() == DialogResult.OK)
+            {
+                setLogFile(dlgFileSave.FileName);
+            }
+        }
+
+        //------------------------------------------------------------
+        private void mnuOpen_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(m_FileName);
         }
 
         //************************************************************

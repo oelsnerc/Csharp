@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -15,7 +16,12 @@ namespace TimeProtocol
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+
+            var Main_Form = new frmMain();
+            if (Main_Form.canRun())
+            {
+                Application.Run(Main_Form);
+            }
         }
     }
 }
