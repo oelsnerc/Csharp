@@ -15,11 +15,9 @@ namespace TimeProtocol
     {
         //************************************************************
         protected const string Registry_Key = "HKEY_CURRENT_USER\\Software\\MMC\\TimeProtocol";
-        protected const string Registry_FileName = "FileName";
 
         protected Logger m_Log;
-        protected bool   m_Log_enabled;
-        protected string m_FileName;
+        protected PersistentData m_Data;
 
         protected int _MouseDownX;
         protected int _MouseDownY;
@@ -29,9 +27,9 @@ namespace TimeProtocol
         {
             InitializeComponent();
 
+            m_Data = new PersistentData(Registry_Key);
+
             m_Log = null;
-            m_FileName = null;
-            m_Log_enabled = false;
 
             ssdSeconds.Value = 0;
             ssdMinutes.Value = 0;
@@ -41,23 +39,23 @@ namespace TimeProtocol
         //------------------------------------------------------------
         public bool canRun()
         {
-            m_FileName = (string)Registry.GetValue(Registry_Key, Registry_FileName, null);
+            if (m_Data.isInitialized)
+                return true;
 
-            if (m_FileName == null)
-            {   // now let the user define the name
-                if (dlgFileSave.ShowDialog() == DialogResult.OK)
-                {
-                    m_FileName = dlgFileSave.FileName;
-                }
-            }
+            if (dlgFileSave.ShowDialog() != DialogResult.OK)
+                return false;
 
-            return (m_FileName != null);
+            m_Data.FileName = dlgFileSave.FileName;
+            m_Data.Position = this.Location;
+            return true;
         }
 
         //------------------------------------------------------------
         private void frmMain_Load(object sender, EventArgs e)
         {
-            setLogFile(m_FileName);
+            // read the position from the registry
+            this.Location = m_Data.Position;
+            m_Log = new Logger(m_Data.FileName);
 
             m_Log.log("Start");
             SystemEvents.PowerModeChanged += new PowerModeChangedEventHandler(SystemEvents_PowerModeChanged);
@@ -70,108 +68,83 @@ namespace TimeProtocol
         //------------------------------------------------------------
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            m_Log.log("Close");
             m_Log.Close();
-            if (m_FileName != null)
-            {
-                Registry.SetValue(Registry_Key, Registry_FileName, m_FileName);
-            }
+            m_Data.Position = this.Location;
+            m_Data.WriteData(Registry_Key);
         }
 
         //************************************************************
-        private void setLogFile(string FileName)
-        {
-            if (m_Log != null)
-            {
-                m_Log.log("continued in " + FileName);
-                m_Log.Close();
-            }
-            m_FileName = FileName;
-
-            m_Log = new Logger(m_FileName);
-            m_Log.log("Open");
-        }
-
-        //------------------------------------------------------------
         public void setLogEnabled(bool Enabled)
         {
+            m_Log.isEnabled = Enabled;
             if (Enabled)
             {
                 btnRun.ImageIndex = 1;
                 SystemTray.Text = "Time protocol: Started!";
-                m_Log.log("log enabled");
-                m_Log_enabled = true;
             }
             else
             {
                 btnRun.ImageIndex = 0;
                 SystemTray.Text = "Time protocol: Stopped!";
-                m_Log.log("log stopped");
-                m_Log_enabled = false;
             }
         }
+
 
         //************************************************************
         public void SystemEvents_PowerModeChanged(Object sender, PowerModeChangedEventArgs e)
         {
-            if (m_Log_enabled)
+            switch (e.Mode)
             {
-                switch (e.Mode)
-                {
-                    case PowerModes.Resume:
-                        m_Log.log("Resume");
-                        break;
-                    case PowerModes.StatusChange:
-                        // m_Log.log("PowerChange");  // ignore this one due to flooding
-                        break;
-                    case PowerModes.Suspend:
-                        m_Log.log("Suspend");
-                        break;
-                    default:
-                        m_Log.log("Unknown PowerModeChange event");
-                        break;
-                }
+                case PowerModes.Resume:
+                    m_Log.log("Resume");
+                    break;
+                case PowerModes.StatusChange:
+                    // m_Log.log("PowerChange");  // ignore this one due to flooding
+                    break;
+                case PowerModes.Suspend:
+                    m_Log.log("Suspend");
+                    break;
+                default:
+                    m_Log.log("Unknown PowerModeChange event");
+                    break;
             }
         }
 
         //------------------------------------------------------------
         public void SystemEvents_SessionSwitch(Object sender, SessionSwitchEventArgs e)
         {
-            if (m_Log_enabled)
+            switch (e.Reason)
             {
-                switch (e.Reason)
-                {
-                    case SessionSwitchReason.ConsoleConnect:
-                        m_Log.log("ConsoleConnect");
-                        break;
-                    case SessionSwitchReason.ConsoleDisconnect:
-                        m_Log.log("Console Disconnect");
-                        break;
-                    case SessionSwitchReason.RemoteConnect:
-                        m_Log.log("RemoteConnect");
-                        break;
-                    case SessionSwitchReason.RemoteDisconnect:
-                        m_Log.log("RemoteDisconnect");
-                        break;
-                    case SessionSwitchReason.SessionLock:
-                        m_Log.log("SessionLock");
-                        break;
-                    case SessionSwitchReason.SessionLogoff:
-                        m_Log.log("SessionLogoff");
-                        break;
-                    case SessionSwitchReason.SessionLogon:
-                        m_Log.log("SessionLogon");
-                        break;
-                    case SessionSwitchReason.SessionRemoteControl:
-                        m_Log.log("SessionRemoteControl");
-                        break;
-                    case SessionSwitchReason.SessionUnlock:
-                        m_Log.log("SessionUnlock");
-                        break;
-                    default:
-                        m_Log.log("Unknown Session Switch event");
-                        break;
-                }
+                case SessionSwitchReason.ConsoleConnect:
+                    m_Log.log("ConsoleConnect");
+                    break;
+                case SessionSwitchReason.ConsoleDisconnect:
+                    m_Log.log("Console Disconnect");
+                    break;
+                case SessionSwitchReason.RemoteConnect:
+                    m_Log.log("RemoteConnect");
+                    break;
+                case SessionSwitchReason.RemoteDisconnect:
+                    m_Log.log("RemoteDisconnect");
+                    break;
+                case SessionSwitchReason.SessionLock:
+                    m_Log.log("SessionLock");
+                    break;
+                case SessionSwitchReason.SessionLogoff:
+                    m_Log.log("SessionLogoff");
+                    break;
+                case SessionSwitchReason.SessionLogon:
+                    m_Log.log("SessionLogon");
+                    break;
+                case SessionSwitchReason.SessionRemoteControl:
+                    m_Log.log("SessionRemoteControl");
+                    break;
+                case SessionSwitchReason.SessionUnlock:
+                    m_Log.log("SessionUnlock");
+                    break;
+                default:
+                    m_Log.log("Unknown Session Switch event");
+                    break;
             }
         }
 
@@ -216,18 +189,18 @@ namespace TimeProtocol
         //------------------------------------------------------------
         private void mnuNewFile_Click(object sender, EventArgs e)
         {
-            dlgFileSave.InitialDirectory = Path.GetDirectoryName(m_FileName);
-            dlgFileSave.FileName = Path.GetFileName(m_FileName);
+            dlgFileSave.InitialDirectory = Path.GetDirectoryName(m_Data.FileName);
+            dlgFileSave.FileName = Path.GetFileName(m_Data.FileName);
             if (dlgFileSave.ShowDialog() == DialogResult.OK)
             {
-                setLogFile(dlgFileSave.FileName);
+                m_Log.setFileName(dlgFileSave.FileName);
             }
         }
 
         //------------------------------------------------------------
         private void mnuOpen_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(m_FileName);
+            System.Diagnostics.Process.Start(m_Data.FileName);
         }
 
         //************************************************************

@@ -88,6 +88,39 @@
             pnlBackground.Padding = new System.Windows.Forms.Padding(4);
             pnlBackground.Size = new System.Drawing.Size(296, 110);
             pnlBackground.TabIndex = 12;
+            pnlBackground.DoubleClick += new System.EventHandler(this.frmMain_DoubleClick);
+            pnlBackground.MouseDown += new System.Windows.Forms.MouseEventHandler(this.frmMain_MouseDown);
+            pnlBackground.MouseMove += new System.Windows.Forms.MouseEventHandler(this.frmMain_MouseMove);
+            // 
+            // mnuMain
+            // 
+            mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mnuFile});
+            mnuMain.Name = "mnuMain";
+            mnuMain.Size = new System.Drawing.Size(93, 26);
+            // 
+            // mnuFile
+            // 
+            mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            mnuFileNew,
+            mnuOpen});
+            mnuFile.Name = "mnuFile";
+            mnuFile.Size = new System.Drawing.Size(92, 22);
+            mnuFile.Text = "File";
+            // 
+            // mnuFileNew
+            // 
+            mnuFileNew.Name = "mnuFileNew";
+            mnuFileNew.Size = new System.Drawing.Size(156, 22);
+            mnuFileNew.Text = "New ...";
+            mnuFileNew.Click += new System.EventHandler(this.mnuNewFile_Click);
+            // 
+            // mnuOpen
+            // 
+            mnuOpen.Name = "mnuOpen";
+            mnuOpen.Size = new System.Drawing.Size(156, 22);
+            mnuOpen.Text = "Open externally";
+            mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
             // btnClose
             // 
@@ -161,36 +194,6 @@
             this.ssdSeconds.Size = new System.Drawing.Size(50, 50);
             this.ssdSeconds.TabIndex = 2;
             this.ssdSeconds.Value = 34;
-            // 
-            // mnuMain
-            // 
-            mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            mnuFile});
-            mnuMain.Name = "mnuMain";
-            mnuMain.Size = new System.Drawing.Size(93, 26);
-            // 
-            // mnuFile
-            // 
-            mnuFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            mnuFileNew,
-            mnuOpen});
-            mnuFile.Name = "mnuFile";
-            mnuFile.Size = new System.Drawing.Size(152, 22);
-            mnuFile.Text = "File";
-            // 
-            // mnuFileNew
-            // 
-            mnuFileNew.Name = "mnuFileNew";
-            mnuFileNew.Size = new System.Drawing.Size(156, 22);
-            mnuFileNew.Text = "New ...";
-            mnuFileNew.Click += new System.EventHandler(this.mnuNewFile_Click);
-            // 
-            // mnuOpen
-            // 
-            mnuOpen.Name = "mnuOpen";
-            mnuOpen.Size = new System.Drawing.Size(156, 22);
-            mnuOpen.Text = "Open externally";
-            mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
             // 
             // frmMain
             // 
