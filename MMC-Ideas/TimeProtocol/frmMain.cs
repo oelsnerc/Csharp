@@ -68,6 +68,9 @@ namespace TimeProtocol
         //------------------------------------------------------------
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Show();
+            this.WindowState = FormWindowState.Normal;
+
             m_Log.Close();
             m_Data.Position = this.Location;
             m_Data.WriteData(Registry_Key);

@@ -37,6 +37,7 @@
             System.Windows.Forms.ToolStripMenuItem mnuFile;
             System.Windows.Forms.ToolStripMenuItem mnuFileNew;
             System.Windows.Forms.ToolStripMenuItem mnuOpen;
+            System.Windows.Forms.ToolStripMenuItem mnuExit;
             this.btnClose = new System.Windows.Forms.Button();
             this.btnRun = new System.Windows.Forms.Button();
             this.dlgFileSave = new System.Windows.Forms.SaveFileDialog();
@@ -45,6 +46,7 @@
             this.ssdHours = new MMC_Controls.Seven_Segment_Display();
             this.ssdMinutes = new MMC_Controls.Seven_Segment_Display();
             this.ssdSeconds = new MMC_Controls.Seven_Segment_Display();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             label1 = new System.Windows.Forms.Label();
             imgList = new System.Windows.Forms.ImageList(this.components);
             pnlBackground = new System.Windows.Forms.Panel();
@@ -52,6 +54,7 @@
             mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             mnuFileNew = new System.Windows.Forms.ToolStripMenuItem();
             mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             pnlBackground.SuspendLayout();
             mnuMain.SuspendLayout();
             this.SuspendLayout();
@@ -95,9 +98,11 @@
             // mnuMain
             // 
             mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            mnuFile});
+            mnuFile,
+            this.toolStripSeparator1,
+            mnuExit});
             mnuMain.Name = "mnuMain";
-            mnuMain.Size = new System.Drawing.Size(93, 26);
+            mnuMain.Size = new System.Drawing.Size(93, 54);
             // 
             // mnuFile
             // 
@@ -157,6 +162,7 @@
             // 
             // SystemTray
             // 
+            this.SystemTray.ContextMenuStrip = mnuMain;
             this.SystemTray.Icon = ((System.Drawing.Icon)(resources.GetObject("SystemTray.Icon")));
             this.SystemTray.Text = "Time protocol";
             this.SystemTray.Visible = true;
@@ -195,6 +201,18 @@
             this.ssdSeconds.TabIndex = 2;
             this.ssdSeconds.Value = 34;
             // 
+            // mnuExit
+            // 
+            mnuExit.Name = "mnuExit";
+            mnuExit.Size = new System.Drawing.Size(92, 22);
+            mnuExit.Text = "Exit";
+            mnuExit.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(89, 6);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -232,6 +250,7 @@
         private System.Windows.Forms.Timer tmrClock;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.NotifyIcon SystemTray;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 
