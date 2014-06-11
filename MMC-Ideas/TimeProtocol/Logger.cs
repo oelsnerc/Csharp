@@ -16,10 +16,16 @@ namespace TimeProtocol
             return ts;
         }
 
+        protected static string Log_Separator = "********************";
+
         protected string m_FileName = null;
         protected StreamWriter m_FileStream = null;
 
         private bool m_isEnabled;
+        private DateTime m_LastStart;
+
+        public DateTime LastStart { get { return m_LastStart; } }
+
         public bool isEnabled
         {
             get { return m_isEnabled; }
@@ -54,13 +60,14 @@ namespace TimeProtocol
         {
             isEnabled = true;
             setFileName(FileName);
+            m_LastStart = DateTime.Now;
         }
 
         public void Close()
         {
             if (m_FileStream != null)
             {
-                log("Close");
+                //log("Close");
                 m_FileStream.Close();
             }
 
@@ -74,6 +81,25 @@ namespace TimeProtocol
                 write(GetTimeStamp(DateTime.Now) + '\t' + Message + Environment.NewLine);
         }
 
+        public void log_start(string Message)
+        {
+            m_LastStart = DateTime.Now;
+            if (isEnabled)
+            {
+                write(Log_Separator + Environment.NewLine);
+                write(GetTimeStamp(DateTime.Now) + '\t' + Message + Environment.NewLine);
+            }
+        }
+
+        public void log_end(string Message)
+        {
+            if (isEnabled)
+            {
+                write(GetTimeStamp(DateTime.Now) + '\t' + Message + Environment.NewLine);
+                write(Log_Separator + Environment.NewLine);
+            }
+        }
+
         public void setFileName(string FileName)
         {
             if (m_FileStream != null)
@@ -85,7 +111,7 @@ namespace TimeProtocol
             m_FileName = FileName;
             m_FileStream = File.AppendText(m_FileName);
             
-            log("Open");
+            //log("Open");
         }
     }
 }

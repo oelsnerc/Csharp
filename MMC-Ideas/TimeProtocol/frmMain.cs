@@ -57,7 +57,7 @@ namespace TimeProtocol
             this.Location = m_Data.Position;
             m_Log = new Logger(m_Data.FileName);
 
-            m_Log.log("Start");
+            m_Log.log_start("Start");
             SystemEvents.PowerModeChanged += new PowerModeChangedEventHandler(SystemEvents_PowerModeChanged);
             SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
             tmrClock.Enabled = true;
@@ -71,6 +71,7 @@ namespace TimeProtocol
             Show();
             this.WindowState = FormWindowState.Normal;
 
+            m_Log.log_end("End");
             m_Log.Close();
             m_Data.Position = this.Location;
             m_Data.WriteData(Registry_Key);
@@ -99,13 +100,13 @@ namespace TimeProtocol
             switch (e.Mode)
             {
                 case PowerModes.Resume:
-                    m_Log.log("Resume");
+                    m_Log.log_start("Resume");
                     break;
                 case PowerModes.StatusChange:
                     // m_Log.log("PowerChange");  // ignore this one due to flooding
                     break;
                 case PowerModes.Suspend:
-                    m_Log.log("Suspend");
+                    m_Log.log_end("Suspend");
                     break;
                 default:
                     m_Log.log("Unknown PowerModeChange event");
@@ -162,9 +163,19 @@ namespace TimeProtocol
         {
             DateTime now = DateTime.Now;
 
-            ssdHours.Value = now.Hour;
-            ssdMinutes.Value = now.Minute;
-            ssdSeconds.Value = now.Second;
+            if (mnuTimeDuration.Checked)
+            {
+                TimeSpan dur = now - m_Log.LastStart;
+                ssdHours.Value = dur.Hours;
+                ssdMinutes.Value = dur.Minutes;
+                ssdSeconds.Value = dur.Seconds;
+            }
+            else
+            {
+                ssdHours.Value = now.Hour;
+                ssdMinutes.Value = now.Minute;
+                ssdSeconds.Value = now.Second;
+            }
         }
 
         //------------------------------------------------------------
@@ -204,6 +215,14 @@ namespace TimeProtocol
         private void mnuOpen_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(m_Data.FileName);
+        }
+
+        //------------------------------------------------------------
+        private void mnuTime_Click(object sender, EventArgs e)
+        {
+            mnuTimeDuration.Checked = (sender == mnuTimeDuration);
+            mnuTimeCurrent.Checked = (sender == mnuTimeCurrent);
+            tmrClock_Tick(sender, e);
         }
 
         //************************************************************

@@ -38,6 +38,10 @@
             System.Windows.Forms.ToolStripMenuItem mnuFileNew;
             System.Windows.Forms.ToolStripMenuItem mnuOpen;
             System.Windows.Forms.ToolStripMenuItem mnuExit;
+            System.Windows.Forms.ToolStripMenuItem mnuTime;
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mnuTimeCurrent = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuTimeDuration = new System.Windows.Forms.ToolStripMenuItem();
             this.btnClose = new System.Windows.Forms.Button();
             this.btnRun = new System.Windows.Forms.Button();
             this.dlgFileSave = new System.Windows.Forms.SaveFileDialog();
@@ -46,7 +50,6 @@
             this.ssdHours = new MMC_Controls.Seven_Segment_Display();
             this.ssdMinutes = new MMC_Controls.Seven_Segment_Display();
             this.ssdSeconds = new MMC_Controls.Seven_Segment_Display();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             label1 = new System.Windows.Forms.Label();
             imgList = new System.Windows.Forms.ImageList(this.components);
             pnlBackground = new System.Windows.Forms.Panel();
@@ -55,6 +58,7 @@
             mnuFileNew = new System.Windows.Forms.ToolStripMenuItem();
             mnuOpen = new System.Windows.Forms.ToolStripMenuItem();
             mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+            mnuTime = new System.Windows.Forms.ToolStripMenuItem();
             pnlBackground.SuspendLayout();
             mnuMain.SuspendLayout();
             this.SuspendLayout();
@@ -99,10 +103,11 @@
             // 
             mnuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             mnuFile,
+            mnuTime,
             this.toolStripSeparator1,
             mnuExit});
             mnuMain.Name = "mnuMain";
-            mnuMain.Size = new System.Drawing.Size(93, 54);
+            mnuMain.Size = new System.Drawing.Size(153, 98);
             // 
             // mnuFile
             // 
@@ -110,7 +115,7 @@
             mnuFileNew,
             mnuOpen});
             mnuFile.Name = "mnuFile";
-            mnuFile.Size = new System.Drawing.Size(92, 22);
+            mnuFile.Size = new System.Drawing.Size(152, 22);
             mnuFile.Text = "File";
             // 
             // mnuFileNew
@@ -126,6 +131,43 @@
             mnuOpen.Size = new System.Drawing.Size(156, 22);
             mnuOpen.Text = "Open externally";
             mnuOpen.Click += new System.EventHandler(this.mnuOpen_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // mnuExit
+            // 
+            mnuExit.Name = "mnuExit";
+            mnuExit.Size = new System.Drawing.Size(152, 22);
+            mnuExit.Text = "Exit";
+            mnuExit.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // mnuTime
+            // 
+            mnuTime.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuTimeCurrent,
+            this.mnuTimeDuration});
+            mnuTime.Name = "mnuTime";
+            mnuTime.Size = new System.Drawing.Size(152, 22);
+            mnuTime.Text = "Time";
+            // 
+            // mnuTimeCurrent
+            // 
+            this.mnuTimeCurrent.Checked = true;
+            this.mnuTimeCurrent.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.mnuTimeCurrent.Name = "mnuTimeCurrent";
+            this.mnuTimeCurrent.Size = new System.Drawing.Size(152, 22);
+            this.mnuTimeCurrent.Text = "Current";
+            this.mnuTimeCurrent.Click += new System.EventHandler(this.mnuTime_Click);
+            // 
+            // mnuTimeDuration
+            // 
+            this.mnuTimeDuration.Name = "mnuTimeDuration";
+            this.mnuTimeDuration.Size = new System.Drawing.Size(152, 22);
+            this.mnuTimeDuration.Text = "Duration";
+            this.mnuTimeDuration.Click += new System.EventHandler(this.mnuTime_Click);
             // 
             // btnClose
             // 
@@ -201,18 +243,6 @@
             this.ssdSeconds.TabIndex = 2;
             this.ssdSeconds.Value = 34;
             // 
-            // mnuExit
-            // 
-            mnuExit.Name = "mnuExit";
-            mnuExit.Size = new System.Drawing.Size(92, 22);
-            mnuExit.Text = "Exit";
-            mnuExit.Click += new System.EventHandler(this.btnClose_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(89, 6);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -251,6 +281,8 @@
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.NotifyIcon SystemTray;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem mnuTimeCurrent;
+        private System.Windows.Forms.ToolStripMenuItem mnuTimeDuration;
     }
 }
 
