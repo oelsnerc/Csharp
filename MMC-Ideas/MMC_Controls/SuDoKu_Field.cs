@@ -9,89 +9,35 @@ namespace MMC_Controls
 {
     public class SuDoKu_Field
     {
-        protected SuDoKu_Cell[,] Cells;             // all the fields
-        protected Stack<SuDoKu_Cell[,]> _History;   // keep all previous states
-        protected int _Dimension;                   // the Sudokus Dimension
-        protected int _Size;                        // the number of fields in a row/column/square
-
-        protected string _Commands;                 // the string-presentation of executed changes
-        protected enum SuDoKu_Commands
-	    {
-            None = 0,
-            Set,
-            Swap_Values,
-            Swap_Rows,
-            Swap_SquareRows,
-            Max
-	    }
+        protected SuDoKu_Cell[,]        ivCells;        // all the fields
+        protected int                   ivDimension;    // the Sudokus Dimension
+        protected int                   ivGroupSize;    // the number of fields in a row/column/square
 
         //************************************************************
         public SuDoKu_Field(int MyDimension)
         {
-            _History = new Stack<SuDoKu_Cell[,]>();
-            Dimension = MyDimension;                // This will call ReflectChanges();
-        }
+            ivDimension = MyDimension;
+            ivGroupSize = ivDimension * ivDimension;
 
-        //************************************************************
-        protected void ReflectChanges()
-        {
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // init the properties
-            _History.Clear();
-            _Commands = "";
-            _Dimension = Dimension;
-            _Size = _Dimension * _Dimension;
-            Cells = new SuDoKu_Cell[_Size, _Size];
-
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // init the Fields
-            for (int x = 0; x < _Size; x++)
-                for (int y = 0; y < _Size; y++)
-                {
-                    Cells[x, y] = new SuDoKu_Cell(_Size);
-                }
-        }
-
-        //------------------------------------------------------------
-        // Keep History
-        public void SaveState()
-        {
-            _History.Push(Copy(Cells));
-        }
-
-        //------------------------------------------------------------
-        public void Undo()
-        {
-            if (_History.Count > 0)
+            ivCells = new SuDoKu_Cell[ivGroupSize, ivGroupSize];
+            for (int row = 0; row < ivGroupSize; row++)
             {
-                Cells = _History.Pop();
-            }
-        }
-
-        //------------------------------------------------------------
-        public static SuDoKu_Cell[,] Copy(SuDoKu_Cell[,] other)
-        {
-            int MySize = other.GetLength(0);
-            SuDoKu_Cell[,] MyCells = new SuDoKu_Cell[MySize,MySize];
-            for (int x = 0; x < MySize; x++)
-            {
-                for (int y = 0; y < MySize; y++)
+                for (int column = 0; column < ivGroupSize; column++)
                 {
-                    MyCells[x, y].CopyFrom(ref other[x, y]);
+                    ivCells[row, column] = new SuDoKu_Cell(ivGroupSize);
                 }
             }
-            return MyCells;
         }
 
         //------------------------------------------------------------
         public override string ToString()
         {
-            string rc = _Dimension.ToString();
-            for (int x = 0; x < _Size; x++)
+            string rc = ivDimension.ToString();
+            for (int row = 0; row < ivGroupSize; row++)
             {
-                for (int y = 0; y < _Size; y++)
+                for (int column = 0; column < ivGroupSize; column++)
                 {
-                    rc += "\n" + Cells[x, y].ToString();
+                    rc += "\n" + ivCells[row, column].ToString()
                 }
             }
             return rc;
@@ -101,86 +47,34 @@ namespace MMC_Controls
         public void FromString(string Data)
         {
             string[] Fields = Data.Split('\n');
-            _Dimension = int.Parse(Fields[0]);
-            ReflectChanges();
-            int i = 1;
-            for (int x = 0; x < _Size; x++)
+            ivDimension = int.Parse(Fields[0]);
+            ivGroupSize = ivDimension * ivDimension;
+
+            ivCells = new SuDoKu_Cell[ivGroupSize, ivGroupSize];
+
+            int i = 0;
+            for (int row = 0; row < ivGroupSize; row++)
             {
-                for (int y = 0; y < _Size; y++)
+                for (int column = 0; column < ivGroupSize; column++)
                 {
-                    Cells[x, y].FromString(Fields[i]);
-                    i++;
+                    ivCells[row, column] = new SuDoKu_Cell(Fields[i]);
+                    ++i;
                 }
             }
         }
 
-        //------------------------------------------------------------
-        public string CommandHistory { get { return _Commands; } }
-        protected void Command_Add(SuDoKu_Commands cmd, params object[] args)
-        {
-            _Commands += ((int)cmd).ToString();
-            foreach (object o in args) _Commands += ',' + o.ToString();
-            _Commands += ';';
-        }
-
         //************************************************************
-        public int Dimension
-        {
-            get { return _Dimension; }
-            set { _Dimension = (value > 1) ? value : 3; ReflectChanges(); }
-        }
-        public int Size { get { return _Size; } }
-        public List<int> Options(int X, int Y) { return Cells[X, Y].Options_List; }
-        public int Options_Count(int X, int Y) { return Cells[X,Y].Options_Count; }
-        public bool IsCalculated(int X, int Y) { return Cells[X, Y].Calculated; }
-        public int this[int X, int Y]
-        {
-            get { return Cells[X, Y].Value; }
-            set
-            {
-                Command_Add(SuDoKu_Commands.Set, X, Y, value);
-                SetValue(X, Y, value);
-            }
-        }
+        public int Dimension { get { return ivDimension; } }
+        public int GroupSize { get { return ivGroupSize; } }
+        public int Size { get { return ivGroupSize*ivGroupSize; } }
 
-        //************************************************************
-        private void SetValue(int X,int Y,int Value)
+        public List<int> Options(int row, int column) { return ivCells[row, column].Options_List; }
+        public int Options_Count(int row, int column) { return ivCells[row, column].Options_Count; }
+        public bool isCalculated(int row, int column) { return ivCells[row, column].isCalculated; }
+        public int this[int row, int column]
         {
-            if (Value < 1 || Cells[X, Y].Value > 0)
-            {   //Unset the Value
-                Option_Set(X, Y, Cells[X, Y].Value, true);
-            }
-
-            if (Value > 0)
-            {   // Set the Value
-                Option_Set(X, Y, Value, false);
-            }
-        }
-
-        //------------------------------------------------------------
-        // Set the option in all relevant neighbours
-        // i.e. Set the value if Option == false
-        // or set it to zero if Option == true
-        private void Option_Set(int X, int Y, int Value, bool Option)
-        {
-            Cells[X, Y].Value = Option ? 0 : Value;
-            
-            int X_Left = (X / _Dimension) * _Dimension;
-            int X_Right = X_Left + _Dimension;
-            int Y_Top = (Y / _Dimension) * _Dimension;
-            int Y_Bottom = Y_Top + _Dimension;
-            Value--;
-
-            // remove horizontal
-            for (int x = 0; x < X_Left; x++) Cells[x, Y].Options_Set(Value,Option);
-            for (int x = X_Right; x < _Size; x++) Cells[x, Y].Options_Set(Value, Option);
-            // remove vertical
-            for (int y = 0; y < Y_Top; y++) Cells[X, y].Options_Set(Value, Option);
-            for (int y = Y_Bottom; y < _Size; y++) Cells[X, y].Options_Set(Value, Option);
-            // remove squarical *g*
-            for (int x = X_Left; x < X_Right; x++)
-                for (int y = Y_Top; y < Y_Bottom; y++)
-                    Cells[x, y].Options_Set(Value, Option);
+            get { return ivCells[row, column].Value; }
+            set { ivCells[row, column].Value = value; }
         }
 
         //------------------------------------------------------------
@@ -191,7 +85,7 @@ namespace MMC_Controls
                 for (int x = 0; x < _Size; x++)
                     for (int y = 0; y < _Size; y++)
                     {
-                        if (Cells[x, y].Options_Count == 0 && Cells[x, y].Value == 0) return false;
+                        if (Cells[x, y].ivOptions_Count == 0 && Cells[x, y].ivValue == 0) return false;
                     }
                 return true;
             }
@@ -208,16 +102,16 @@ namespace MMC_Controls
                 for (int x = 0; x < _Size; x++)
                     for (int y = 0; y < _Size; y++)
                     {
-                        if (Cells[x, y].Value == 0)
+                        if (Cells[x, y].ivValue == 0)
                         {
-                            int ocount = Cells[x, y].Options_Count;
+                            int ocount = Cells[x, y].ivOptions_Count;
                             if (ocount == 0) return false;
                             if (ocount == 1)
                             {
                                 cnt++;
                                 int Value = Cells[x, y].Options_First;
                                 Option_Set(x, y, Value, false);
-                                Cells[x, y].Calculated = true;
+                                Cells[x, y].ivCalculated = true;
                             }
                         }
                     }
@@ -241,9 +135,9 @@ namespace MMC_Controls
                 for (int x = 0; x < _Size; x++)
                     for (int y = 0; y < _Size; y++)
                     {
-                        if (Cells[x, y].Value == 0)
+                        if (Cells[x, y].ivValue == 0)
                         {
-                            int ocount = Cells[x, y].Options_Count;
+                            int ocount = Cells[x, y].ivOptions_Count;
                             if (ocount == 0) return false;
                             if (ocount == 2)
                             {
@@ -253,14 +147,14 @@ namespace MMC_Controls
                                 SuDoKu_Cell[,] Old = Cells;         // Save the old state
                                 Cells = Copy(Cells);                // work on the copy
                                 Option_Set(x, y, L[0], false);      // set the value
-                                Cells[x, y].Calculated = true;
+                                Cells[x, y].ivCalculated = true;
                                 bool r1 = Solve_Two(depth);         // and solve it
                                 
                                 // Check the 2nd Value
                                 SuDoKu_Cell[,] New = Cells;         // keep the result
                                 Cells = Copy(Old);                  // reset to the original state
                                 Option_Set(x, y, L[1], false);      // set the value
-                                Cells[x, y].Calculated = true;
+                                Cells[x, y].ivCalculated = true;
                                 bool r2 = Solve_Two(depth);         // and solve it
 
                                 // now analyze the results
@@ -318,10 +212,10 @@ namespace MMC_Controls
         protected int FindRowMin(int Y_Bgn, int Y_End)
         {
             int idx = Y_Bgn;
-            int min = Cells[0,idx].Value;
+            int min = Cells[0,idx].ivValue;
             for (int y = Y_Bgn+1; y < Y_End; y++)
 			{
-                int v = Cells[0,y].Value;
+                int v = Cells[0,y].ivValue;
                 if (v == 0) return Y_Bgn;
                 if (v < min) { idx = y; min = v; }
 			}
@@ -331,10 +225,10 @@ namespace MMC_Controls
         protected int FindSquareMin(int Y_Bgn)
         {
             int idx = Y_Bgn;
-            int min = Cells[0, idx].Value;
+            int min = Cells[0, idx].ivValue;
             for (int y = Y_Bgn + _Dimension; y < _Size; y+=_Dimension)
             {
-                int v = Cells[0, y].Value;
+                int v = Cells[0, y].ivValue;
                 if (v == 0) return Y_Bgn;
                 if (v < min) { idx = y; min = v; }
             }
@@ -347,7 +241,7 @@ namespace MMC_Controls
             for (int X = 0; X < _Size; X++)
             {
                 int O1 = X + 1;
-                int O2 = Cells[X,0].Value;
+                int O2 = Cells[X,0].ivValue;
                 if (O2 > 0) Swap_Values(O1, O2);
             }
 

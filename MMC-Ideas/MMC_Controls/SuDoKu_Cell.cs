@@ -7,137 +7,196 @@ using System.Collections.Generic;
 namespace MMC_Controls
 {
     //****************************************************************
-    public struct SuDoKu_Cell
+    // the idea is that one cell represents a set of options
+    // This implementation will use an uint to represent at most 32 options
+    // each bit represents an option, i.e. set means available
+    // if the over all value is 0 no options is available
+    // if there is only one bit set, this is the only option left
+    // NOTE: maximum 32 options are supported
+    //----------------------------------------------------------------
+    // having this a class makes it a reference type
+    public class SuDoKu_Cell
     {
-        public int Value;           // the actual Value of the field (0 = unset)
-        public bool Calculated;     // If this Value was user set or calculated
-        public int Options_Count;   // the number of options left
-        private bool[] Options;   // Holds all the possible options for this field
+        private uint ivValue;           // the options, each bit represents one option
+        private bool ivCalculated;      // If this Value was user set or calculated
+        private int  ivOptions_Count;   // the number of options left
 
+        //------------------------------------------------------------
+        // constructor
         public SuDoKu_Cell(int MaxOption)
         {
-            Value = 0;
-            Calculated = false;
-            Options = new bool[MaxOption];
-            for (int i = 0; i < MaxOption; i++)
+            ivValue = (1u << MaxOption) - 1;
+            ivCalculated = false;
+            ivOptions_Count = MaxOption;
+        }
+
+        //------------------------------------------------------------
+        // copy constructor
+        public SuDoKu_Cell(SuDoKu_Cell other)
+        {
+            CopyFrom(other);
+        }
+
+        //------------------------------------------------------------
+        // construct from a saved string
+        public SuDoKu_Cell(string Encoded)
+        {
+            FromString(Encoded);
+        }
+
+        //------------------------------------------------------------
+        // explicit copy
+        public void CopyFrom(SuDoKu_Cell other)
+        {
+            ivValue = other.ivValue;
+            ivCalculated = other.ivCalculated;
+            ivOptions_Count = other.ivOptions_Count;
+        }
+
+        //------------------------------------------------------------
+        // exchange 2 cells
+        public void SwapWith(SuDoKu_Cell other)
+        {
+            uint v = ivValue;
+            ivValue = other.ivValue;
+            other.ivValue = v;
+
+            bool c = ivCalculated;
+            ivCalculated = other.ivCalculated;
+            other.ivCalculated = c;
+
+            int cnt = ivOptions_Count;
+            ivOptions_Count = other.ivOptions_Count;
+            other.ivOptions_Count = cnt;
+        }
+
+        //------------------------------------------------------------
+        // return the number of possible options
+        // NOTE: we use lazy evaluation
+        public int Options_Count
+        {
+            get
             {
-                Options[i] = true;
+                if (ivOptions_Count < 0)
+                {
+                    ivOptions_Count = 0;
+                    uint v = ivValue;
+                    while (v > 0)
+                    {
+                        ivOptions_Count++;
+                        v &= v - 1; // reset the least significant bit
+                    }
+                }
+                return ivOptions_Count;
             }
-            Options_Count = MaxOption;
         }
 
-        public SuDoKu_Cell(ref SuDoKu_Cell other)
+        //------------------------------------------------------------
+        // some basic manipulation functions
+        public void Options_AND(SuDoKu_Cell other)
         {
-            Value = other.Value;
-            Calculated = other.Calculated;
-            Options_Count = other.Options_Count;
-            Options = (bool[])other.Options.Clone();
+            ivValue &= other.ivValue;
+            ivOptions_Count = -1;
         }
 
-        public void CopyFrom(ref SuDoKu_Cell other)
+        public void Options_OR(SuDoKu_Cell other)
         {
-            Value = other.Value;
-            Calculated = other.Calculated;
-            Options_Count = other.Options_Count;
-            Options = (bool[]) other.Options.Clone();
+            ivValue |= other.ivValue;
+            ivOptions_Count = -1;
         }
 
-        public void SwapWith(ref SuDoKu_Cell other)
+        public void Options_REMOVE(SuDoKu_Cell other)
         {
-            int v = Value;
-            Value = other.Value;
-            other.Value = v;
-
-            bool c = Calculated;
-            Calculated = other.Calculated;
-            other.Calculated = c;
-
-            int cnt = Options_Count;
-            Options_Count = other.Options_Count;
-            other.Options_Count = cnt;
-
-            bool[] o = Options;
-            Options = other.Options;
-            other.Options = o;
+            ivValue &= (~other.ivValue);
+            ivOptions_Count = -1;
         }
 
+        public void Options_REMOVE(int Index)
+        {
+            uint v = (1u << (Index - 1));
+            ivValue &= (~v);
+            ivOptions_Count--;
+        }
+
+        public void Options_SET(int Index)
+        {
+            ivValue = (1u << (Index - 1));
+            ivOptions_Count = 1;
+        }
+
+        //------------------------------------------------------------
+        // basic io functions
+        //------------------------------------------------------------
+        // convert to a string to be able to save it into a file
         public override string ToString()
         {
-            string rc = Value.ToString();
-            rc += "," + Calculated.ToString();
-            rc += "," + Options.Length.ToString();
-            for (int i = 0; i < Options.Length; i++)
-            {
-                if (Options[i]) rc += "," + i.ToString();
-            }
+            string rc = ivValue.ToString();
+            rc += "," + ivCalculated.ToString();
             return rc;
         }
 
+        //------------------------------------------------------------
+        // deserialize from a string
         public void FromString(string Data)
         {
             string[] Fields = Data.Split(',');
-            Value = int.Parse(Fields[0]);
-            Calculated = bool.Parse(Fields[1]);
-            int MaxOption = int.Parse(Fields[2]);
-            Options_Count = 0;
-            Options = new bool[MaxOption];
-            for (int i = 3; i < Fields.Length; i++)
-            {
-                int v = int.Parse(Fields[i]);
-                Options[v] = true;
-                Options_Count++;
-            }
+            ivValue = uint.Parse(Fields[0]);
+            ivCalculated = bool.Parse(Fields[1]);
+            ivOptions_Count = -1;
         }
 
-        public void Options_Set(int Index, bool Value)
-        {
-            if (Options[Index] != Value)
-            {
-                Options[Index] = Value;
-                if (Value)
-                    Options_Count++;
-                else
-                    Options_Count--;
-            }
-        }
-
+        //------------------------------------------------------------
+        // return the first available options
+        // NOTE: 0 means no option available
         public int Options_First
         {
             get
             {
-                for (int i = 0; i < Options.Length; i++)
-                {
-                    if (Options[i]) return (i+1);
-                }
-                return 0;
+                uint value = (ivValue ^ (ivValue - 1)) >> 1;    // Set traling 0's to 1's and clear the rest
+                int res = 0;
+                while (value > 0) { value >>= 1; res++; }
+                return res;
             }
         }
 
+        //------------------------------------------------------------
+        // return the list of ALL available options
         public List<int> Options_List
         {
             get
             {
-                List<int> rc = new List<int>(Options.Length);
-                for (int i = 0; i < Options.Length; i++)
+                List<int> rc = new List<int>();
+                uint value = ivValue;
+                for (int pos = 1; value > 0; ++pos )
                 {
-                    if (Options[i]) rc.Add(i+1);
+                    if ((value & 1) != 0) rc.Add(pos);
+                    value >>= 1;
                 }
                 return rc;
             }
         }
 
-        public void Option_Swap(int O1, int O2)
+        //------------------------------------------------------------
+        // flag to be set by user
+        public bool isCalculated
+        { 
+            get { return ivCalculated; }
+            set { ivCalculated = value; }
+        }
+
+        public int Value
         {
-            bool t = Options[O1-1];
-            Options[O1-1] = Options[O2-1];
-            Options[O2-1] = t;
-            if (Value == O1)
-                Value = O2;
-            else if (Value == O2)
-                Value = O1;
+            get
+            {
+                if (Options_Count != 1) return 0;
+                return Options_First;
+            }
+            set
+            {
+                Options_SET(value);
+            }
         }
     }
-    //****************************************************************
 }
 
 //********************************************************************
