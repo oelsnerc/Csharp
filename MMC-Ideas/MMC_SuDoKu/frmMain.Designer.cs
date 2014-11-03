@@ -42,15 +42,15 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miSolve = new System.Windows.Forms.ToolStripMenuItem();
+            this.normalizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuChoice = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.stsMain = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.dlgSave = new System.Windows.Forms.SaveFileDialog();
             this.dlgOpen = new System.Windows.Forms.OpenFileDialog();
-            this.miSolve = new System.Windows.Forms.ToolStripMenuItem();
-            this.normalizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sdkMain = new MMC_Controls.SuDoKu();
-            this.showHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.stsMain.SuspendLayout();
             this.SuspendLayout();
@@ -62,7 +62,7 @@
             this.editToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(484, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(499, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "mnuMain";
             // 
@@ -73,7 +73,7 @@
             this.saveToolStripMenuItem,
             this.openToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // newToolStripMenuItem
@@ -81,7 +81,7 @@
             this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dimensionToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.newToolStripMenuItem.Text = "New";
             // 
             // dimensionToolStripMenuItem
@@ -93,7 +93,7 @@
             this.toolStripMenuItem5,
             this.toolStripMenuItem6});
             this.dimensionToolStripMenuItem.Name = "dimensionToolStripMenuItem";
-            this.dimensionToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.dimensionToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.dimensionToolStripMenuItem.Text = "Dimension";
             // 
             // toolStripMenuItem2
@@ -134,14 +134,14 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.Menu_Save_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -153,15 +153,38 @@
             this.miSolve,
             this.normalizeToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // undoToolStripMenuItem
             // 
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.undoToolStripMenuItem.Text = "Undo";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.Menu_Undo_Click);
+            // 
+            // showHistoryToolStripMenuItem
+            // 
+            this.showHistoryToolStripMenuItem.Name = "showHistoryToolStripMenuItem";
+            this.showHistoryToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.showHistoryToolStripMenuItem.Text = "Show History";
+            this.showHistoryToolStripMenuItem.Click += new System.EventHandler(this.Menu_History_Click);
+            // 
+            // miSolve
+            // 
+            this.miSolve.Checked = true;
+            this.miSolve.CheckOnClick = true;
+            this.miSolve.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.miSolve.Name = "miSolve";
+            this.miSolve.Size = new System.Drawing.Size(186, 22);
+            this.miSolve.Text = "Solve while changing";
+            // 
+            // normalizeToolStripMenuItem
+            // 
+            this.normalizeToolStripMenuItem.Name = "normalizeToolStripMenuItem";
+            this.normalizeToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.normalizeToolStripMenuItem.Text = "Normalize";
+            this.normalizeToolStripMenuItem.Click += new System.EventHandler(this.Menu_Normalize_Click);
             // 
             // mnuChoice
             // 
@@ -172,9 +195,9 @@
             // 
             this.stsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblStatus});
-            this.stsMain.Location = new System.Drawing.Point(0, 450);
+            this.stsMain.Location = new System.Drawing.Point(0, 468);
             this.stsMain.Name = "stsMain";
-            this.stsMain.Size = new System.Drawing.Size(484, 22);
+            this.stsMain.Size = new System.Drawing.Size(499, 22);
             this.stsMain.TabIndex = 2;
             // 
             // lblStatus
@@ -194,43 +217,20 @@
             this.dlgOpen.Filter = "SuDoKu-files|*.sudoku|All files|*.*";
             this.dlgOpen.Title = "Read a SuDoKu from a file";
             // 
-            // miSolve
-            // 
-            this.miSolve.Checked = true;
-            this.miSolve.CheckOnClick = true;
-            this.miSolve.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.miSolve.Name = "miSolve";
-            this.miSolve.Size = new System.Drawing.Size(173, 22);
-            this.miSolve.Text = "Solve while changing";
-            // 
-            // normalizeToolStripMenuItem
-            // 
-            this.normalizeToolStripMenuItem.Name = "normalizeToolStripMenuItem";
-            this.normalizeToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.normalizeToolStripMenuItem.Text = "Normalize";
-            this.normalizeToolStripMenuItem.Click += new System.EventHandler(this.Menu_Normalize_Click);
-            // 
             // sdkMain
             // 
             this.sdkMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sdkMain.Location = new System.Drawing.Point(0, 24);
             this.sdkMain.Name = "sdkMain";
-            this.sdkMain.Size = new System.Drawing.Size(484, 426);
+            this.sdkMain.Size = new System.Drawing.Size(499, 444);
             this.sdkMain.TabIndex = 3;
             this.sdkMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.sdkMain_MouseClick);
-            // 
-            // showHistoryToolStripMenuItem
-            // 
-            this.showHistoryToolStripMenuItem.Name = "showHistoryToolStripMenuItem";
-            this.showHistoryToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.showHistoryToolStripMenuItem.Text = "Show History";
-            this.showHistoryToolStripMenuItem.Click += new System.EventHandler(this.Menu_History_Click);
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 472);
+            this.ClientSize = new System.Drawing.Size(499, 490);
             this.Controls.Add(this.sdkMain);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.stsMain);

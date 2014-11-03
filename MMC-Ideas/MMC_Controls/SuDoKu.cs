@@ -16,13 +16,17 @@ namespace MMC_Controls
 {
     public partial class SuDoKu : UserControl
     {
-        SuDoKu_Field _Sudoku;
+        SuDoKu_Field ivSudoku;
 
         //************************************************************
         // things you need to paint
-        protected Pen _Line_Normal;                 // for the grid
-        protected Pen _Line_Thick;                  // for the grid
-        protected Brush _Brush;                     // the color of the numbers
+        protected Pen ivLine_Normal;                // for the grid
+        protected Pen ivLine_Thick;                 // for the grid
+        protected Brush ivBrush;                    // the color of the numbers
+        protected Rectangle ivFieldUpperLeft;       // the field upper left
+        protected Font ivFont;                      // the font of the numbers in the fields
+        protected StringFormat ivFormat;            // how to print the numbers within the fields
+        protected Stack<SuDoKu_Field> ivHistory;    // store the last Sudokus
 
         //************************************************************
         // Properties
@@ -31,8 +35,13 @@ namespace MMC_Controls
         [Description("Defines the dimension of the Sudoku")]
         public int Dimension
         {
-            get { return _Sudoku.Dimension; }
-            set { _Sudoku.Dimension = value; this.Invalidate(); }
+            get { return ivSudoku.Dimension; }
+            set
+            {
+                ivSudoku = new SuDoKu_Field(value);
+                ivHistory.Clear();
+                this.Invalidate();
+            }
         }
 
         //------------------------------------------------------------
@@ -46,8 +55,8 @@ namespace MMC_Controls
             set
             {
                 _GridColor = value;
-                _Line_Normal = new Pen(_GridColor, 2);
-                _Line_Thick = new Pen(_GridColor, 4);
+                ivLine_Normal = new Pen(_GridColor, 2);
+                ivLine_Thick = new Pen(_GridColor, 4);
                 this.Invalidate();
             }
         }
@@ -61,11 +70,19 @@ namespace MMC_Controls
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.DoubleBuffer, true);
 
-            _Brush = new SolidBrush(this.ForeColor);
-            _Line_Normal = new Pen(_GridColor, 2);
-            _Line_Thick = new Pen(_GridColor, 4);
+            ivBrush = new SolidBrush(this.ForeColor);
+            ivLine_Normal = new Pen(_GridColor, 2);
+            ivLine_Thick = new Pen(_GridColor, 4);
 
-            _Sudoku = new SuDoKu_Field(3);
+            ivFormat = new StringFormat(StringFormatFlags.NoClip);
+            ivFormat.Alignment = StringAlignment.Center;
+            ivFormat.LineAlignment = StringAlignment.Center;
+
+            ivSudoku = new SuDoKu_Field(3);
+
+            ivHistory = new Stack<SuDoKu_Field>();
+
+            UpdateDimensions();
         }
 
         //************************************************************
@@ -75,7 +92,7 @@ namespace MMC_Controls
 
             using (StreamWriter fs = File.CreateText(FileName))
             {
-                fs.Write(_Sudoku.ToString());
+                fs.Write(ivSudoku.ToString());
                 fs.Close();
             };
         }
@@ -85,18 +102,17 @@ namespace MMC_Controls
         {
             using (StreamReader fs = File.OpenText(FileName))
             {
-                _Sudoku.FromString(fs.ReadToEnd());
+                ivSudoku.FromString(fs.ReadToEnd());
                 fs.Close();
             };
         }
 
-        //************************************************************
-        // draw the Sudoku
-        protected void Draw(Graphics g)
+        //------------------------------------------------------------
+        protected void UpdateDimensions()
         {
             int w = this.Width;
             int h = this.Height;
-            int _Size = _Sudoku.Size;
+            int _Size = ivSudoku.GroupSize;
 
             int w_Field = w / _Size;
             int h_Field = h / _Size;
@@ -104,63 +120,83 @@ namespace MMC_Controls
             int x_Start = (w - _Size * w_Field) / 2;
             int y_Start = (h - _Size * h_Field) / 2;
 
-            int x_End = w - x_Start;
-            int y_End = h - y_Start;
+            ivFieldUpperLeft = new Rectangle(x_Start, y_Start, w_Field, h_Field);
+            ivFont = new Font("Arial", h_Field / 2);
+        }
 
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // first draw the squares
-            Font font = new Font("Arial", h_Field/2);
-            StringFormat format = new StringFormat(StringFormatFlags.NoClip);
-            format.Alignment = StringAlignment.Center;
-            format.LineAlignment = StringAlignment.Center;
-            for (int x = 0; x < _Size; x++)
-                for (int y = 0; y < _Size; y++)
+        //------------------------------------------------------------
+        protected void Draw_Squares(Graphics g)
+        {
+            int _Size = ivSudoku.GroupSize;
+            Rectangle RectToDraw = new Rectangle(ivFieldUpperLeft.Location, ivFieldUpperLeft.Size);
+
+            for (int row = 0; row < _Size; ++row)
+            {
+                for (int column = 0; column < _Size; ++column)
                 {
-                    Rectangle R = new Rectangle(x_Start + x * w_Field, y_Start + y * h_Field, w_Field, h_Field);
-                    int Value = _Sudoku[x, y];
-                    int cnt = _Sudoku.Options_Count(x, y);
+                    int cnt = ivSudoku.Options_Count(row, column);
                     if (cnt <= _Size / 2)
                     {
                         Brush B;
                         switch (cnt)
-	                    {
-                            case 3 : B = Brushes.LightGreen; break;
-                            case 2 : B = Brushes.LightSalmon; break;
-                            case 1 : B = Brushes.LightPink; break;
-                            case 0 : B = (Value == 0) ? Brushes.DarkRed : Brushes.LightPink; break;
-		                    default: B = Brushes.LightBlue; break;
+                        {
+                            case 3: B = Brushes.LightGreen; break;
+                            case 2: B = Brushes.LightSalmon; break;
+                            case 1: B = Brushes.LightPink; break;
+                            case 0: B = Brushes.DarkRed; break;
+                            default: B = Brushes.LightBlue; break;
                         }
-                        g.FillRectangle(B, R);
+                        g.FillRectangle(B, RectToDraw);
                     }
 
-                    if (Value > 0)
+                    if (cnt == 1)
                     {
-                        Brush B = (_Sudoku.IsCalculated(x,y)) ? Brushes.Red : _Brush;
-                        g.DrawString(Value.ToString(), font, B, R, format);
+                        Brush B = (ivSudoku.isCalculated(row, column)) ? Brushes.Red : ivBrush;
+                        g.DrawString(ivSudoku[row,column].ToString(), ivFont, B, RectToDraw, ivFormat);
                     }
+                    RectToDraw.X += ivFieldUpperLeft.Width;
                 }
+                RectToDraw.Y += ivFieldUpperLeft.Height;
+                RectToDraw.X = ivFieldUpperLeft.X;
+            }
+        }
 
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            // now the grid
-            for (int x = x_Start; x <= x_End; x += w_Field)
+        //------------------------------------------------------------
+        protected void Draw_Grid(Graphics g)
+        {
+            int x_end = this.Width - ivFieldUpperLeft.X;
+            int y_end = this.Height - ivFieldUpperLeft.Y;
+
+            // Draw Columns
+            for (int x = ivFieldUpperLeft.X; x <= x_end; x += ivFieldUpperLeft.Width)
             {
-                g.DrawLine(_Line_Normal, x, y_Start, x, y_End);
+                g.DrawLine(ivLine_Normal, x, ivFieldUpperLeft.Y, x, y_end);
             }
 
-            for (int y = y_Start; y <= y_End; y += h_Field)
+            // draw Rows
+            for (int y = ivFieldUpperLeft.Y; y <= y_end; y += ivFieldUpperLeft.Height)
             {
-                g.DrawLine(_Line_Normal, x_Start, y, x_End, y);
+                g.DrawLine(ivLine_Normal, ivFieldUpperLeft.X, y, x_end, y);
             }
 
-            int _Dimension = _Sudoku.Dimension;
+            // draw the groups
+            int _Dimension = ivSudoku.Dimension;
             for (int n = 1; n < _Dimension; n++)
             {
-                int x = x_Start + n * w_Field * _Dimension;
-                int y = y_Start + n * h_Field * _Dimension;
-                g.DrawLine(_Line_Thick, x, y_Start, x, y_End);
-                g.DrawLine(_Line_Thick, x_Start, y, x_End, y);
+                int x = ivFieldUpperLeft.X + n * ivFieldUpperLeft.Width * _Dimension;
+                int y = ivFieldUpperLeft.Y + n * ivFieldUpperLeft.Height * _Dimension;
+                g.DrawLine(ivLine_Thick, x, ivFieldUpperLeft.Y, x, y_end);
+                g.DrawLine(ivLine_Thick, ivFieldUpperLeft.X, y, x_end, y);
             }
 
+        }
+
+        //************************************************************
+        // draw the Sudoku
+        protected void Draw(Graphics g)
+        {
+            Draw_Squares(g);
+            Draw_Grid(g);
         }
 
         //------------------------------------------------------------
@@ -172,49 +208,60 @@ namespace MMC_Controls
 
         protected override void OnForeColorChanged(System.EventArgs e)
         {
-            _Brush = new SolidBrush(this.ForeColor);
+            ivBrush = new SolidBrush(this.ForeColor);
             base.OnForeColorChanged(e);
         }
 
         protected override void OnSizeChanged(EventArgs e)
         {
+            UpdateDimensions();
             Invalidate();
             base.OnSizeChanged(e);
         }
 
         public Point ToIndex(int X, int Y)
         {
-            int _Size = _Sudoku.Size;
-            int w_Field = Width / _Size;
-            int h_Field = Height / _Size;
+            int column = (X - ivFieldUpperLeft.X) / ivFieldUpperLeft.Width;
+            int row = (Y - ivFieldUpperLeft.Y) / ivFieldUpperLeft.Height;
 
-            int x_Start = (Width - _Size * w_Field) / 2;
-            int y_Start = (Height - _Size * h_Field) / 2;
-
-            return new Point((X - x_Start) / w_Field, (Y - y_Start) / h_Field);
+            return new Point(row, column);
         }
 
         //************************************************************
         // Get and Set a value
-        public int this[int X, int Y]
+        //public int this[int row, int column]
+        //{
+        //    get { return ivSudoku[row, column]; }
+        //    set
+        //    {
+        //        ivSudoku[row, column] = value;
+        //        ivSudoku.setCalculated(row, column, false);
+        //        ivSudoku.Solve_Ones();
+        //    }
+        //}
+        public bool setValue(int row, int column, int value)
         {
-            get { return _Sudoku[X, Y]; }
-            set { _Sudoku[X, Y] = value; }
-        }
-        public List<int> Options(int x, int y) { return _Sudoku.Options(x,y); }
-        public void SaveState() { _Sudoku.SaveState(); }
-        public void Undo() { _Sudoku.Undo(); }
-        public string History { get { return _Sudoku.CommandHistory; } }
-        
-        public bool Solve()
-        {
-            //return _Sudoku.Solve_One();
-            return _Sudoku.Solve_Two(0);
+            ivSudoku[row, column] = value;
+            ivSudoku.setCalculated(row, column, false);
+            return ivSudoku.Solve_Ones();
         }
 
-        public void Normalize()
+        public List<int> Options(int x, int y) { return ivSudoku.Options(x, y); }
+
+        //************************************************************
+        // History
+        public void SaveState()
         {
-            _Sudoku.Normalize();
+            ivHistory.Push(new SuDoKu_Field(ivSudoku));
+        }
+
+        public void Undo()
+        { 
+            if (ivHistory.Count > 0)
+            {
+                ivSudoku = ivHistory.Pop();
+                Invalidate();
+            }
         }
     }
 }

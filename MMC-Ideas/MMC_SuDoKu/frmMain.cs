@@ -27,22 +27,22 @@ namespace MMC_SuDoKu
 
         public void Solve()
         {
-            bool valid = sdkMain.Solve();
-            sdkMain.Invalidate();
-            if (!valid)
-            {
-                string Msg = lblStatus.Text + " lead to a contradiction!";
-                lblStatus.Text = Msg;
-                MessageBox.Show(Msg, "SuDoKu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                sdkMain.Undo();
-                sdkMain.Invalidate();
-            }
+            MessageBox.Show("Solving Not Implemented", "SuDoKu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //bool valid = sdkMain.Solve();
+            //sdkMain.Invalidate();
+            //if (!valid)
+            //{
+            //    string Msg = lblStatus.Text + " lead to a contradiction!";
+            //    lblStatus.Text = Msg;
+            //    MessageBox.Show(Msg, "SuDoKu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //    sdkMain.Undo();
+            //    sdkMain.Invalidate();
+            //}
         }
 
         public void Undo()
         {
             sdkMain.Undo();
-            sdkMain.Invalidate();
             lblStatus.Text = "Undo";
         }
 
@@ -57,10 +57,18 @@ namespace MMC_SuDoKu
             ToolStripMenuItem mi = (ToolStripMenuItem)sender;
             //MessageBox.Show(mi.Tag.ToString());
             sdkMain.SaveState();
-            sdkMain[pntField.X, pntField.Y] = (int)mi.Tag;
+
+            bool isValid = sdkMain.setValue(pntField.X, pntField.Y, (int)mi.Tag);
             sdkMain.Invalidate();
             lblStatus.Text = "Setting " + pntField.ToString() + " to " + mi.Tag.ToString();
-            if (miSolve.Checked) Solve();
+            if (!isValid)
+            {
+                MessageBox.Show("This has led to an invalid State!", "SuDoKu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                //if (miSolve.Checked) Solve();
+            }
         }
 
         private void sdkMain_MouseClick(object sender, MouseEventArgs e)
@@ -120,14 +128,16 @@ namespace MMC_SuDoKu
 
         private void Menu_Normalize_Click(object sender, EventArgs e)
         {
-            sdkMain.SaveState();
-            sdkMain.Normalize();
-            sdkMain.Invalidate();
+            MessageBox.Show("Normailize Not Implemented", "SuDoKu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //sdkMain.SaveState();
+            //sdkMain.Normalize();
+            //sdkMain.Invalidate();
         }
 
         private void Menu_History_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(sdkMain.History, "SuDoKu History");
+            MessageBox.Show("History Not Implemented", "SuDoKu", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            // MessageBox.Show(sdkMain.History, "SuDoKu History");
         }
     }
 }

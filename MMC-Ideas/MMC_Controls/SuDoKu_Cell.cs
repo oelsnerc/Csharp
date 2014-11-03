@@ -19,6 +19,7 @@ namespace MMC_Controls
     {
         private uint ivValue;           // the options, each bit represents one option
         private bool ivCalculated;      // If this Value was user set or calculated
+        private bool ivSet;             // If this value was set or not
         private int  ivOptions_Count;   // the number of options left
 
         //------------------------------------------------------------
@@ -26,7 +27,8 @@ namespace MMC_Controls
         public SuDoKu_Cell(int MaxOption)
         {
             ivValue = (1u << MaxOption) - 1;
-            ivCalculated = false;
+            ivCalculated = true;
+            ivSet = false;
             ivOptions_Count = MaxOption;
         }
 
@@ -50,24 +52,8 @@ namespace MMC_Controls
         {
             ivValue = other.ivValue;
             ivCalculated = other.ivCalculated;
+            ivSet = other.ivSet;
             ivOptions_Count = other.ivOptions_Count;
-        }
-
-        //------------------------------------------------------------
-        // exchange 2 cells
-        public void SwapWith(SuDoKu_Cell other)
-        {
-            uint v = ivValue;
-            ivValue = other.ivValue;
-            other.ivValue = v;
-
-            bool c = ivCalculated;
-            ivCalculated = other.ivCalculated;
-            other.ivCalculated = c;
-
-            int cnt = ivOptions_Count;
-            ivOptions_Count = other.ivOptions_Count;
-            other.ivOptions_Count = cnt;
         }
 
         //------------------------------------------------------------
@@ -90,6 +76,10 @@ namespace MMC_Controls
                 return ivOptions_Count;
             }
         }
+
+        //------------------------------------------------------------
+        // returns if any option is left
+        public bool isEmpty { get { return (ivValue == 0); } }
 
         //------------------------------------------------------------
         // some basic manipulation functions
@@ -115,13 +105,14 @@ namespace MMC_Controls
         {
             uint v = (1u << (Index - 1));
             ivValue &= (~v);
-            ivOptions_Count--;
+            ivOptions_Count = -1;
         }
 
         public void Options_SET(int Index)
         {
             ivValue = (1u << (Index - 1));
             ivOptions_Count = 1;
+            ivSet = true;
         }
 
         //------------------------------------------------------------
@@ -147,13 +138,12 @@ namespace MMC_Controls
 
         //------------------------------------------------------------
         // return the first available options
-        // NOTE: 0 means no option available
-        public int Options_First
+        protected int Options_First
         {
             get
             {
                 uint value = (ivValue ^ (ivValue - 1)) >> 1;    // Set traling 0's to 1's and clear the rest
-                int res = 0;
+                int res = 1;
                 while (value > 0) { value >>= 1; res++; }
                 return res;
             }
@@ -184,11 +174,18 @@ namespace MMC_Controls
             set { ivCalculated = value; }
         }
 
+        //------------------------------------------------------------
+        // flagt to check if this cell was already set
+        public bool isSet { get { return ivSet; } }
+
+        //------------------------------------------------------------
         public int Value
         {
             get
             {
-                if (Options_Count != 1) return 0;
+                int cnt = Options_Count;
+                if (cnt == 0) return -1;
+                if (cnt > 1) return 0;
                 return Options_First;
             }
             set
