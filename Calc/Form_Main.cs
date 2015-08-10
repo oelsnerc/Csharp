@@ -22,6 +22,7 @@ namespace Calc
         private string RegKey_Terms = "Terms";
         private Color Color_Default = Color.Black;
         private Color Color_Error = Color.Red;
+        private Color Color_Back = Color.BlanchedAlmond;
         
         //************************************************************
         public Form_Main()
@@ -143,10 +144,16 @@ namespace Calc
             tbView.SelectionFont = _Font_Number;
             tbView.SelectionIndent = 0;
             tbView.SelectionColor = Color_Default;
+
             tbView.AppendText(_Number.ToString("D4") + ":\t");
 
+            Color old_bg = tbView.SelectionBackColor;
             tbView.SelectionFont = _Font_Term;
-            tbView.AppendText(Msg + Environment.NewLine);
+            tbView.SelectionBackColor = Color_Back;
+            tbView.AppendText(Msg);
+            tbView.SelectionBackColor = old_bg;
+
+            tbView.AppendText(Environment.NewLine);
         }
 
         protected void NewSubEntry(string Msg, Color Col)
