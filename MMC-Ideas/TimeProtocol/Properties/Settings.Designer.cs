@@ -22,5 +22,53 @@ namespace TimeProtocol.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowDuration {
+            get {
+                return ((bool)(this["ShowDuration"]));
+            }
+            set {
+                this["ShowDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int PositionX {
+            get {
+                return ((int)(this["PositionX"]));
+            }
+            set {
+                this["PositionX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int PositionY {
+            get {
+                return ((int)(this["PositionY"]));
+            }
+            set {
+                this["PositionY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FileName {
+            get {
+                return ((string)(this["FileName"]));
+            }
+            set {
+                this["FileName"] = value;
+            }
+        }
     }
 }
