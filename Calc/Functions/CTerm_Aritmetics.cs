@@ -2,6 +2,7 @@
 // CTerm_Add - Implements the Add term
 // (c) Jan 2010 MMC
 //********************************************************************
+using MMC.Numbers;
 
 namespace MMC.Calc.Functions
 {

@@ -4,6 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calc", "Calc.csproj", "{E90C4D7A-D3C9-4A89-9CAD-79B56D17DD80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{75E83B31-383F-42FC-8B14-74532EF6A87A} = {75E83B31-383F-42FC-8B14-74532EF6A87A}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Numbers", "..\Numbers\Numbers.csproj", "{75E83B31-383F-42FC-8B14-74532EF6A87A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_Numbers", "..\Numbers\Test_Numbers\Test_Numbers.csproj", "{A2D53763-F398-41A8-98CC-BCFB59B83E41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +22,14 @@ Global
 		{E90C4D7A-D3C9-4A89-9CAD-79B56D17DD80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E90C4D7A-D3C9-4A89-9CAD-79B56D17DD80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E90C4D7A-D3C9-4A89-9CAD-79B56D17DD80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75E83B31-383F-42FC-8B14-74532EF6A87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75E83B31-383F-42FC-8B14-74532EF6A87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75E83B31-383F-42FC-8B14-74532EF6A87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75E83B31-383F-42FC-8B14-74532EF6A87A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2D53763-F398-41A8-98CC-BCFB59B83E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2D53763-F398-41A8-98CC-BCFB59B83E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2D53763-F398-41A8-98CC-BCFB59B83E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2D53763-F398-41A8-98CC-BCFB59B83E41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
