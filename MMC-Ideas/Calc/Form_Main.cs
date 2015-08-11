@@ -37,8 +37,8 @@ namespace Calc
             _Font_Term = new Font(_Font_Result, FontStyle.Bold);
 
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            mnuPrec_Integer.Tag = new CEnvironment(MMC.Numbers.CNumber.CNumberType.cnt_Integer);
-            mnuPrec_Double.Tag = new CEnvironment(MMC.Numbers.CNumber.CNumberType.cnt_Double);
+            mnuPrec_Integer.Tag = new CEnvironment(CNumber.CNumberType.cnt_Integer);
+            mnuPrec_Double.Tag = new CEnvironment(CNumber.CNumberType.cnt_Double);
 
             SetPrecision(mnuPrec_Double);
 

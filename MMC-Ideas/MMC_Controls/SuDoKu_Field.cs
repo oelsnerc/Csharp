@@ -158,6 +158,29 @@ namespace MMC_Controls
             return true;
         }
 
+        //------------------------------------------------------------
+        // Try to find the correct value for all cell that have
+        // only 2 options left
+        // return true if the state is still valid
+        public bool Solve_Twos()
+        {
+            for (int row = 0; row < ivGroupSize; ++row)
+            {
+                for (int column = 0; column < ivGroupSize; column++)
+                {
+                    SuDoKu_Cell c = ivCells[row, column];
+                    if (!c.isSet && c.Options_Count == 2)
+                    {
+                        SuDoKu_Field old = new SuDoKu_Field(this);
+                        int v = c.Options_First;
+                        set(row, column, v);
+                        // if (! Solve_Ones() )
+                    }
+                }
+            }
+            return true;
+        }
+
     }
 }
 

@@ -85,27 +85,31 @@ namespace MMC_Controls
         // some basic manipulation functions
         public void Options_AND(SuDoKu_Cell other)
         {
+            uint old = ivValue;
             ivValue &= other.ivValue;
-            ivOptions_Count = -1;
+            if (old != ivValue) ivOptions_Count = -1;
         }
 
         public void Options_OR(SuDoKu_Cell other)
         {
+            uint old = ivValue;
             ivValue |= other.ivValue;
-            ivOptions_Count = -1;
+            if (old != ivValue) ivOptions_Count = -1;
         }
 
         public void Options_REMOVE(SuDoKu_Cell other)
         {
+            uint old = ivValue;
             ivValue &= (~other.ivValue);
-            ivOptions_Count = -1;
+            if (old != ivValue) ivOptions_Count = -1;
         }
 
         public void Options_REMOVE(int Index)
         {
+            uint old = ivValue;
             uint v = (1u << (Index - 1));
             ivValue &= (~v);
-            ivOptions_Count = -1;
+            if (old != ivValue) ivOptions_Count = -1;
         }
 
         public void Options_SET(int Index)
@@ -138,7 +142,7 @@ namespace MMC_Controls
 
         //------------------------------------------------------------
         // return the first available options
-        protected int Options_First
+        public int Options_First
         {
             get
             {

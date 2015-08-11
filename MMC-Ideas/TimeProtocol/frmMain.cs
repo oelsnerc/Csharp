@@ -14,10 +14,7 @@ namespace TimeProtocol
     public partial class frmMain : Form
     {
         //************************************************************
-        protected const string Registry_Key = "HKEY_CURRENT_USER\\Software\\MMC\\TimeProtocol";
-
         protected Logger m_Log;
-        protected PersistentData m_Data;
 
         protected int _MouseDownX;
         protected int _MouseDownY;
@@ -27,9 +24,15 @@ namespace TimeProtocol
         {
             InitializeComponent();
 
-            m_Data = new PersistentData(Registry_Key);
-
-            m_Log = null;
+            string FileName = Properties.Settings.Default.FileName;
+            if (String.IsNullOrEmpty(FileName))
+            {
+                m_Log = null;
+            }
+            else
+            {
+                m_Log = new Logger(FileName);
+            }
 
             ssdSeconds.Value = 0;
             ssdMinutes.Value = 0;
@@ -39,23 +42,29 @@ namespace TimeProtocol
         //------------------------------------------------------------
         public bool canRun()
         {
-            if (m_Data.isInitialized)
+            if (m_Log != null)
                 return true;
 
             if (dlgFileSave.ShowDialog() != DialogResult.OK)
                 return false;
 
-            m_Data.FileName = dlgFileSave.FileName;
-            m_Data.Position = this.Location;
+            m_Log = new Logger(dlgFileSave.FileName);
+            
+            Properties.Settings.Default.FileName = dlgFileSave.FileName;
+            Properties.Settings.Default.PositionX = this.Location.X;
+            Properties.Settings.Default.PositionY = this.Location.Y;
+            
             return true;
         }
 
         //------------------------------------------------------------
         private void frmMain_Load(object sender, EventArgs e)
         {
-            // read the position from the registry
-            this.Location = m_Data.Position;
-            m_Log = new Logger(m_Data.FileName);
+            showTime(!Properties.Settings.Default.ShowDuration);
+
+            Point newLocation = new Point(Properties.Settings.Default.PositionX,
+                                          Properties.Settings.Default.PositionY);
+            this.Location = newLocation;
 
             m_Log.log_start("Start");
             SystemEvents.PowerModeChanged += new PowerModeChangedEventHandler(SystemEvents_PowerModeChanged);
@@ -71,10 +80,15 @@ namespace TimeProtocol
             Show();
             this.WindowState = FormWindowState.Normal;
 
+            Properties.Settings.Default.PositionX = this.Location.X;
+            Properties.Settings.Default.PositionY = this.Location.Y;
+            Properties.Settings.Default.FileName = m_Log.FileName;
+            Properties.Settings.Default.ShowDuration = mnuTimeDuration.Checked;
+
+            Properties.Settings.Default.Save();
+
             m_Log.log_end("End");
             m_Log.Close();
-            m_Data.Position = this.Location;
-            m_Data.WriteData(Registry_Key);
         }
 
         //************************************************************
@@ -91,6 +105,14 @@ namespace TimeProtocol
                 btnRun.ImageIndex = 0;
                 SystemTray.Text = "Time protocol: Stopped!";
             }
+        }
+
+        //************************************************************
+        public void showTime(bool CurrentTime)
+        {
+            Properties.Settings.Default.ShowDuration = !CurrentTime;
+            mnuTimeDuration.Checked = !CurrentTime;
+            mnuTimeCurrent.Checked = CurrentTime;
         }
 
 
@@ -203,25 +225,25 @@ namespace TimeProtocol
         //------------------------------------------------------------
         private void mnuNewFile_Click(object sender, EventArgs e)
         {
-            dlgFileSave.InitialDirectory = Path.GetDirectoryName(m_Data.FileName);
-            dlgFileSave.FileName = Path.GetFileName(m_Data.FileName);
+            string FileName = m_Log.FileName;
+            dlgFileSave.InitialDirectory = Path.GetDirectoryName(FileName);
+            dlgFileSave.FileName = Path.GetFileName(FileName);
             if (dlgFileSave.ShowDialog() == DialogResult.OK)
             {
-                m_Log.setFileName(dlgFileSave.FileName);
+                m_Log.FileName = dlgFileSave.FileName;
             }
         }
 
         //------------------------------------------------------------
         private void mnuOpen_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(m_Data.FileName);
+            System.Diagnostics.Process.Start(m_Log.FileName);
         }
 
         //------------------------------------------------------------
         private void mnuTime_Click(object sender, EventArgs e)
         {
-            mnuTimeDuration.Checked = (sender == mnuTimeDuration);
-            mnuTimeCurrent.Checked = (sender == mnuTimeCurrent);
+            showTime(sender == mnuTimeCurrent);
             tmrClock_Tick(sender, e);
         }
 

@@ -56,10 +56,10 @@ namespace TimeProtocol
             }
         }
 
-        public Logger(string FileName)
+        public Logger(string aFileName)
         {
             isEnabled = true;
-            setFileName(FileName);
+            FileName = aFileName;
             m_LastStart = DateTime.Now;
         }
 
@@ -100,18 +100,26 @@ namespace TimeProtocol
             }
         }
 
-        public void setFileName(string FileName)
+        public string FileName
         {
-            if (m_FileStream != null)
+            get
             {
-                log("continued in " + FileName);
-                Close();
+                return m_FileName;
             }
 
-            m_FileName = FileName;
-            m_FileStream = File.AppendText(m_FileName);
+            set
+            {
+                if (m_FileStream != null)
+                {
+                    log("continued in " + value);
+                    Close();
+                }
+
+                m_FileName = value;
+                m_FileStream = File.AppendText(m_FileName);
             
-            //log("Open");
+                //log("Open");
+            }
         }
     }
 }
