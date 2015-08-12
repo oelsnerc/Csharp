@@ -9,63 +9,73 @@ namespace MMC.Numbers
 {
     public class CNumber_Integer : CNumber
     {
-        protected List<uint> _Values;
+        protected List<byte> _Values;
         protected bool _Sign;
 
         public int size => _Values.Count;
-        protected const long maxDigit = (long)(uint.MaxValue) + 1;
+        protected const long maxDigit = (long)(byte.MaxValue) + 1;
+        protected const int bitsDigit = 8;
 
         //------------------------------------------------------------
         // to init everything
         protected virtual void Clear()
         {
-            _Values = new List<uint>();
+            _Values = new List<byte>();
         }
 
-        protected void ToZero()
+        protected void setZero()
         {
             Clear();
             _Values.Add(0);
             _Sign = false;
         }
 
+        protected void setInteger(int Value)
+        {
+            Clear();
+            _Sign = (Value < 0.0);
+            do
+            {
+                _Values.Add((byte)(Value));
+                Value /= (int)maxDigit;
+            } while (Value >= 1);
+        }
+
         //------------------------------------------------------------
         // to copy
         protected virtual void CopyFrom(CNumber_Integer other)
         {
-            _Values = new List<uint>(other._Values);
+            _Values = new List<byte>(other._Values);
             _Sign = other._Sign;
         }
 
         //************************************************************
         // constructors
-        protected CNumber_Integer() { ToZero(); }
+        protected CNumber_Integer() { setZero(); }
 
         //------------------------------------------------------------
         protected CNumber_Integer(CNumber_Integer other)
         {
-            if (other == null) { ToZero(); }
+            if (other == null) { setZero(); }
             else { CopyFrom(other);  }
         }
 
         //------------------------------------------------------------
         public CNumber_Integer(int Value)
         {
-            Clear();
-            _Sign = (Value < 0.0);
-            _Values.Add((uint)(_Sign ? -Value : Value));
+            setInteger(Value);
         }
 
         //------------------------------------------------------------
         public CNumber_Integer(long Value)
         {
-            _Values = new List<uint>();
+            Clear();
             _Sign = (Value < 0.0);
             if (_Sign) Value = -Value;
 
             do
             {
-                _Values.Add((uint)(Value));
+                _Values.Add((byte)(Value));
                 Value /= maxDigit;
             } while (Value >= 1);
         }
@@ -79,7 +89,7 @@ namespace MMC.Numbers
 
             do
             {
-                _Values.Add((uint)(Value));
+                _Values.Add((byte)(Value));
                 Value /= maxDigit;
             } while (Value >= 1);
         }
@@ -114,16 +124,16 @@ namespace MMC.Numbers
 
 
         // calc the binary algorithm
-        public static int log_bin(uint value)
+        public static uint log_bin(uint value)
         {
-            int result = 0;
+            uint result = 0;
             while (value > 1) { value >>= 1; ++result; };
             return result;
         }
 
         protected string toString_2ish_base(uint Base)
         {
-            int bits = log_bin(Base);
+            uint bits = log_bin(Base);
 
             // generate reversed string of digits
             CNumber_Integer tmp = (CNumber_Integer)Clone();
@@ -139,7 +149,7 @@ namespace MMC.Numbers
             return num;
         }
 
-        protected string toString_odd_base(uint Base)
+        protected string toString_odd_base(byte Base)
         {
             // numbers of digits separated by '.'
             int step = (Base == 10) ? 3 : 4;
@@ -181,7 +191,7 @@ namespace MMC.Numbers
             // if the base is a power of 2
             // let's calc the binary logarithm
             bool poweroftwo = ((Base & (Base - 1)) == 0);
-            string num = (poweroftwo) ? toString_2ish_base(Base) : toString_odd_base(Base);
+            string num = (poweroftwo) ? toString_2ish_base(Base) : toString_odd_base((byte) Base);
 
             for (int i = num.Length - 1; i >= 0; i--) str += num[i];
             return str;
@@ -193,7 +203,7 @@ namespace MMC.Numbers
             Clear();
 
             // Extract the base of the representation
-            uint b = CalcBase(ref Input);
+            byte b = (byte) CalcBase(ref Input);
             if (b == 0) return false;       // if illegal ... return nothing
             if (b == 1) return true;        // only a zero
 
@@ -205,7 +215,7 @@ namespace MMC.Numbers
                     int n = CalcValue(Input[0]);
                     if (n < 0 || n > (b - 1)) break;
                     Multiply(b);
-                    Addition((uint)n);
+                    Addition((byte)n);
                 }
                 Input = Input.Remove(0, 1);
             };
@@ -223,9 +233,7 @@ namespace MMC.Numbers
             }
             set
             {
-                Clear();
-                _Sign = (value < 0);
-                _Values[0] = (uint) ((_Sign) ? -value : value);
+                setInteger(value);
             }
         }
 
@@ -267,31 +275,32 @@ namespace MMC.Numbers
 
         //------------------------------------------------------------
         // move all one digit to the left and insert the value
-        protected virtual void Insert(uint Value) { _Values.Insert(0, Value); }
+        protected void Insert(byte Value) { _Values.Insert(0, Value); }
 
         //------------------------------------------------------------
         // multiply by a power of 2
         // return the remainder
-        protected virtual uint ShiftLeft(int Count)
+        protected virtual uint ShiftLeft(uint Count)
         {
             //TODO think of using the "InsertRange" more efficient
-            uint rem = 0;
-            int Add = 0;
-            while (Count >= 32) { Add++; Count -= 32; }
+            byte rem = 0;
+            uint Add = Count / bitsDigit;
+            Count %= bitsDigit;
 
             if (Count > 0)
             {
-                int NegCount = 32 - Count;
+                int NegCount = (int) (bitsDigit - Count);
                 int cnt = _Values.Count;
-                for (int i = 0; i < cnt; i++)
+                for (int i = 0; i < cnt; ++i)
                 {
-                    uint v = _Values[i];
-                    _Values[i] = (v << Count) | rem;
-                    rem = v >> NegCount;
+                    int v = (int) _Values[i];
+                    _Values[i] <<= (int)Count;
+                    _Values[i] |= rem;
+                    rem = (byte) (v >> NegCount);
                 }
             }
 
-            if (Add > 0) _Values.InsertRange(0, new uint[Add]);
+            if (Add > 0) _Values.InsertRange(0, new byte[Add]);
             if (rem > 0) _Values.Add(rem);
 
             return rem;
@@ -300,16 +309,17 @@ namespace MMC.Numbers
         //------------------------------------------------------------
         // devide by a power of 2
         // return the remainder
-        protected virtual uint ShiftRight(int Count)
+        protected virtual uint ShiftRight(uint Count)
         {
-            uint mask = ((uint)1 << Count) - 1;
-            int NegCount = 32 - Count;
-            uint rem = 0;
-            for (int i = _Values.Count-1; i >= 0; i--)
+            uint mask = (uint) ((1 << (int)Count) - 1);
+            int NegCount = (int) (bitsDigit - Count);
+            byte rem = 0;
+
+            for (int i = _Values.Count-1; i >= 0; --i)
             {
-                uint v = (_Values[i] & mask);
-                _Values[i] >>= Count;
-                _Values[i] |= (rem << NegCount);
+                byte v = (byte) (_Values[i] & mask);
+                _Values[i] >>= (int) Count;
+                _Values[i] |= (byte) ((rem << NegCount));
                 rem = v;
             }
             Trim();
@@ -317,51 +327,52 @@ namespace MMC.Numbers
         }
 
         //------------------------------------------------------------
-        protected virtual void Addition(uint Value)
+        protected virtual void Addition(byte Value)
         {
             if (Value == 0) return;
 
-            _Values[0] = _Values[0] + Value;
+            _Values[0] += Value;
             bool rem = (_Values[0] < Value);
-            for (int i = 1; rem && (i < _Values.Count); i++)
+            for (int i = 1; rem && (i < _Values.Count); ++i)
             {
-                _Values[i]++;
+                ++_Values[i];
                 rem = (_Values[i] == 0);
             }
             if (rem) _Values.Add(1);
         }
 
         //------------------------------------------------------------
-        protected virtual void Multiply(uint Value)
+        protected virtual void Multiply(byte Value)
         {
             if (Value == 0) { Clear(); return; }
             if (Value == 1) return;
 
             uint rem = 0;
-            for (int i = 0; i < _Values.Count; i++)
+            for (int i = 0; i < _Values.Count; ++i)
             {
-                ulong v = ((ulong) _Values[i]) * ((ulong) Value) + rem;
-                rem = (uint) (v >> 32);
-                _Values[i] = (uint)v;
+                uint v = ((uint) _Values[i]) * ((uint) Value) + rem;
+                rem = (uint) (v >> bitsDigit);
+                _Values[i] = (byte)v;
             }
-            if (rem > 0) _Values.Add(rem);
+            if (rem > 0) _Values.Add((byte) rem);
         }
 
         //------------------------------------------------------------
         // divide by an integer and return the remainder
-        protected virtual uint Divide(uint Value)
+        protected virtual byte Divide(byte Value)
         {
             if (Value == 0) throw new CNumberException("Division by Zero!");
             if (Value == 1) return 0;
 
-            long rem = 0;
+            int rem = 0;
             for (int i = _Values.Count-1; i >=0; i--)
             {
-                long v = (rem << 32) + (long) _Values[i];
-                _Values[i] = (uint) Math.DivRem(v, (long)Value, out rem);
+                int v = (rem << bitsDigit);
+                v += _Values[i];
+                _Values[i] = (byte) Math.DivRem(v, (int)Value, out rem);
             }
             Trim();
-            return (uint) rem;
+            return (byte) rem;
         }
 
         //------------------------------------------------------------
@@ -369,7 +380,7 @@ namespace MMC.Numbers
         protected virtual CNumber_Integer Divide(CNumber_Integer other)
         {
             CNumber_Integer Save = new CNumber_Integer(this);       // save the old value
-            Clear();                                                // set the initial result to 0
+            setZero();                                              // set the initial result to 0
 
             int o_len = other._Values.Count;
             int t_len = _Values.Count;
@@ -380,21 +391,23 @@ namespace MMC.Numbers
             int len = o_len - 1;
             while (pos >= 0)
             {
-                Rem.Insert(Save._Values[pos]);                           // take the next digit
+                Rem.Insert(Save._Values[pos]);                      // take the next digit
 
-                uint q = Rem._Values[len] / other._Values[len];     // and make an estimate for the quotient 
+                byte q = Rem._Values[len];
+                q /= other._Values[len];                            // and make an estimate for the quotient 
+
                 CNumber_Integer tmp = new CNumber_Integer(other);   // and calculate the product for this estimated value
                 tmp._Sign = false;
                 tmp.Multiply(q);
                 Rem.Subtraction(tmp);                               // see how good we estimated
                 if (Rem._Sign)                                      // if we are too low just correct by one
                 {
-                    q--;
+                    --q;
                     Rem.add(other);
                 }
 
                 Insert(q);                                          // and write down the quotients digit
-                pos--;                                              // walk one further in our (this) digits
+                --pos;                                              // walk one further in our (this) digits
             }
 
             _Sign = (_Sign != other._Sign);
@@ -412,31 +425,31 @@ namespace MMC.Numbers
         // to let the .Net calc the overflow
         protected virtual void Addition(CNumber_Integer other)
         {
-            ulong rem = 0;                                  // the remainder (either 0 or 1) (ulong for the overflow)
+            uint rem = 0;                                  // the remainder (either 0 or 1) (ulong for the overflow)
             int o_len = other._Values.Count;                // the other length
             int t_len = _Values.Count;                      // our own length
             int len = (t_len  < o_len) ? t_len : o_len;     // calc the minimum length
             int i = 0;                                      // start with the lowest digit
             for (; i < len; i++)                            // first add all common digits
             {
-                rem += (ulong)other._Values[i];             // val = rem + val + other.val
-                rem += (ulong)_Values[i];
-                _Values[i] = (uint)rem;
-                rem >>= 32;                                 // rem = overflow
+                rem += other._Values[i];                    // val = rem + val + other.val
+                rem += _Values[i];
+                _Values[i] = (byte)rem;
+                rem >>= bitsDigit;                          // rem = overflow
             }
             for (; i < o_len; i++)                          // now copy the remaining from the other
             {
-                rem += (ulong)other._Values[i];             // don't forget the remainder
-                _Values.Add((uint)rem);
-                rem >>= 32;
+                rem += other._Values[i];                    // don't forget the remainder
+                _Values.Add((byte)rem);
+                rem >>= bitsDigit;
             }
             for (; (rem>0) && (i < t_len); i++)             // now increase our own remaining digits
             {                                               // as long as the remainder is non-zero
-                rem += (ulong)_Values[i];
-                _Values[i] = (uint)rem;
-                rem >>= 32;
+                rem += _Values[i];
+                _Values[i] = (byte)rem;
+                rem >>= bitsDigit;
             }
-            if (rem > 0) _Values.Add((uint)rem);            // still something left, just add it
+            if (rem > 0) _Values.Add((byte)rem);            // still something left, just add it
         }
 
         //------------------------------------------------------------
@@ -450,29 +463,29 @@ namespace MMC.Numbers
             int i = 0;                                      // start with the lowest digit
             for (; i < len; i++)
             {
-                uint v = other._Values[i]; if (rem) v++;
+                byte v = other._Values[i]; if (rem) ++v;
                 rem = (v > _Values[i]);
                 _Values[i]-=v;
             }
             for (; i < o_len; i++)                          // now copy the remaining from the other
             {
-                uint v = other._Values[i]; if (rem) v++;
-                _Values.Add((uint) (-v));                            // = 0-v;
+                byte v = other._Values[i]; if (rem) ++v;
+                _Values.Add((byte) (-v));                   // = 0-v;
                 rem = true;                                 // allways an overflow
             }
 
-            for (; rem && (i < t_len); i++)                 // now decrease our own remaining digits
+            for (; rem && (i < t_len); ++i)                 // now decrease our own remaining digits
             {
                 rem = (_Values[i] == 0);
-                _Values[i]--;
+                --_Values[i];
             }
 
             if (rem)                                        // if we have an overflow we have to 
             {                                               // negate the result
-                _Values[0] = (uint)(-_Values[0]);
+                _Values[0] = (byte) (-_Values[0]);
                 for (int k = 1; k < _Values.Count; k++)
                 {
-                    _Values[k] ^= 0xFFFFFFFF;
+                    _Values[k] ^= 0xFF;
                 }
                 _Sign = !_Sign;
             }
@@ -485,7 +498,7 @@ namespace MMC.Numbers
         {
             for (int i = 0; i < _Values.Count; i++)
             {
-                _Values[i] ^= 0xFFFFFFFF;
+                _Values[i] ^= 0xFF;
             }
         }
 
@@ -612,7 +625,7 @@ namespace MMC.Numbers
             {
                 CNumber_Integer tmp = new CNumber_Integer(this);
                 tmp.Multiply(o._Values[i]);
-                tmp._Values.InsertRange(0, new uint[i]);
+                tmp._Values.InsertRange(0, new byte[i]);
                 Results[i] = tmp;
             }
 
@@ -669,7 +682,7 @@ namespace MMC.Numbers
             {
                 CNumber_Integer tmp = new CNumber_Integer(this);
                 tmp.Multiply(_Values[i]);
-                tmp._Values.InsertRange(0, new uint[i]);
+                tmp._Values.InsertRange(0, new byte[i]);
                 Results[i] = tmp;
             }
 

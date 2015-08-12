@@ -50,7 +50,7 @@ namespace Test_Numbers
             Assert.AreEqual(1, a.size);
 
             CNumber_Integer b = new CNumber_Integer(0x400000000000);
-            Assert.AreEqual(2, b.size);
+            Assert.AreEqual(6, b.size);
         }
 
     }
