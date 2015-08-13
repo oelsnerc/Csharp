@@ -168,5 +168,43 @@ namespace Test_Numbers
             Assert.AreEqual(1, a.size);
             Assert.AreEqual(0xABU, underflow);
         }
+
+        [TestMethod]
+        public void Addition_01()
+        {
+            CNumber_Integer a = new CNumber_Integer(0xAB);
+            CNumber_Integer b = new CNumber_Integer(0xCD);
+            a.Addition(b);
+
+            // check the paratemer for const
+            Assert.AreEqual(0xCD, b.AsInteger);
+            Assert.AreEqual(1, b.size);
+
+            // now check the result
+            Assert.AreEqual(0x178, a.AsInteger);
+            Assert.AreEqual(2, a.size);
+        }
+
+        [TestMethod]
+        public void Addition_02()
+        {
+            CNumber_Integer a = new CNumber_Integer(0xFFFF);
+            CNumber_Integer b = new CNumber_Integer(0xAB);
+            a.Addition(b);
+
+            Assert.AreEqual(0x100AA, a.AsInteger);
+            Assert.AreEqual(3, a.size);
+        }
+
+        [TestMethod]
+        public void Addition_03()
+        {
+            CNumber_Integer b = new CNumber_Integer(0xFFFF);
+            CNumber_Integer a = new CNumber_Integer(0xAB);
+            a.Addition(b);
+
+            Assert.AreEqual(0x100AA, a.AsInteger);
+            Assert.AreEqual(3, a.size);
+        }
     }
 }

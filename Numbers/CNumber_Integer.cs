@@ -49,8 +49,35 @@ namespace MMC.Numbers
         {
             int end = _Values.Count - 1;
             int cnt = end;
-            while (cnt > 0 && _Values[cnt] == 0) cnt--;
+            while (cnt > 0 && _Values[cnt] == 0) --cnt;
             if (cnt < end) _Values.RemoveRange(cnt + 1, end - cnt);
+        }
+
+        //------------------------------------------------------------
+        // add some digits
+        protected virtual void AddDigits(uint count)
+        {
+            _Values.AddRange(new byte[count]);
+        }
+
+        protected virtual void AddDigit(byte value)
+        {
+            _Values.Add(value);
+        }
+
+        protected virtual void InsertDigits(uint count, int index = 0)
+        {
+            _Values.InsertRange(index, new byte[count]);
+        }
+
+        protected virtual void InsertDigit(byte value, int index = 0)
+        {
+            _Values.Insert(index, value);
+        }
+
+        protected virtual void resizeDigits(uint count)
+        {
+            if (count > size) _Values.AddRange(new byte[count-size]);
         }
 
         //------------------------------------------------------------
@@ -131,7 +158,7 @@ namespace MMC.Numbers
 
             do
             {
-                _Values.Add((byte)(Value));
+                AddDigit((byte) Value);
                 Value /= maxDigit;
             } while (Value >= 1);
         }
@@ -145,7 +172,7 @@ namespace MMC.Numbers
 
             do
             {
-                _Values.Add((byte)(Value));
+                AddDigit((byte) Value);
                 Value /= maxDigit;
             } while (Value >= 1);
         }
@@ -242,15 +269,15 @@ namespace MMC.Numbers
                 _Sign = (value < 0.0);
                 do
                 {
-                    _Values.Add((byte)(value));
-                    value /= (int)maxDigit;
+                    AddDigit((byte) value);
+                    value >>= bitsDigit;
                 } while (value >= 1);
             }
         }
 
         //------------------------------------------------------------
         // the little helpers
-        public override bool IsZero { get { return (_Values.Count == 1 && _Values[0] == 0); } }
+        public override bool IsZero { get { return (size == 1 && _Values[0] == 0); } }
 
         public override bool IsNegative { get { return _Sign; } }
 
@@ -259,9 +286,9 @@ namespace MMC.Numbers
             if (other.MyType != MyType) return false;
 
             CNumber_Integer o = (CNumber_Integer)other;
-            if (_Values.Count != o._Values.Count) return false;
+            if (size != o.size) return false;
 
-            for (int i = 0; i < _Values.Count; i++)
+            for (int i = 0; i < size; i++)
             {
                 if (_Values[i] != o._Values[i]) return false;
             }
@@ -274,19 +301,15 @@ namespace MMC.Numbers
 
             CNumber_Integer o = (CNumber_Integer)other;
 
-            int t_len = _Values.Count;
-            int o_len = o._Values.Count;
+            int t_len = size;
+            int o_len = o.size;
             if (o_len > t_len) return -1;
             if (o_len < t_len) return 1;
 
-            t_len--;
-            while (t_len > 0 && o._Values[t_len] == _Values[t_len]) t_len--;
+            --t_len;
+            while (t_len > 0 && o._Values[t_len] == _Values[t_len]) --t_len;
             return Math.Sign(_Values[t_len] - o._Values[t_len]);
         }
-
-        //------------------------------------------------------------
-        // move all one digit to the left and insert the value
-        protected void Insert(byte Value) { _Values.Insert(0, Value); }
 
         //------------------------------------------------------------
         // multiply by a power of 2
@@ -301,7 +324,7 @@ namespace MMC.Numbers
             if (Count > 0)
             {
                 int NegCount = (int) (bitsDigit - Count);
-                int cnt = _Values.Count;
+                int cnt = size;
                 for (int i = 0; i < cnt; ++i)
                 {
                     int v = (int) _Values[i];
@@ -311,8 +334,8 @@ namespace MMC.Numbers
                 }
             }
 
-            if (Add > 0) _Values.InsertRange(0, new byte[Add]);
-            if (rem > 0) _Values.Add(rem);
+            if (Add > 0) InsertDigits(Add);
+            if (rem > 0) AddDigit(rem);
 
             return rem;
         }
@@ -352,22 +375,76 @@ namespace MMC.Numbers
         }
 
         //------------------------------------------------------------
-        protected virtual void Addition(byte Value)
+        // add this value to the digits starting at position index
+        // Value is ushort to
+        // - be big enough to contain the product of 2 bytes
+        // - and small enough to avoid an uint overflow when
+        //   rem += _Values[index];
+        protected void Addition(ushort Value, int index = 0)
         {
             if (Value == 0) return;
 
-            _Values[0] += Value;
-            bool rem = (_Values[0] < Value);
-            for (int i = 1; rem && (i < _Values.Count); ++i)
+            resizeDigits((uint)index);  // make sure we have enough digits
+
+            uint rem = Value;
+            for (; (Value > 0) && (index < size); ++index)
             {
-                ++_Values[i];
-                rem = (_Values[i] == 0);
+                rem+= _Values[index];
+                _Values[index] = (byte) rem;
+                rem >>= bitsDigit;
             }
-            if (rem) _Values.Add(1);
+
+            // and add the overflow
+            while (rem > 0)
+            {
+                AddDigit((byte)rem);
+                rem >>= bitsDigit;
+            } ;
         }
 
         //------------------------------------------------------------
-        protected virtual void Multiply(byte Value)
+        // add a number
+        // the native way to take care of the overflow
+        // is checking after the summation if the sum is less than
+        // one of the summands, this would mean overflow
+        // but this would need some more conditional branches
+        // so I choose a way with conversions from byte to uint
+        // to let the .Net calc the overflow
+        public void Addition(CNumber_Integer other)
+        {
+            resizeDigits((uint) other.size);                // make sure we are big enough for both
+
+            uint rem = 0;                                   // the remainder
+            int o_len = other.size;                         // the other length
+            int t_len = size;                               // our own length
+            int len = (t_len < o_len) ? t_len : o_len;      // calc the minimum length
+            int i = 0;                                      // start with the lowest digit
+            for (; i < len; ++i)                            // first add all common digits
+            {
+                rem += other._Values[i];                    // val = rem + val + other.val
+                rem += _Values[i];
+                _Values[i] = (byte)rem;
+                rem >>= bitsDigit;                          // rem = overflow
+            }
+
+            for (; i < o_len; ++i)                          // now copy the remaining from the other
+            {
+                rem += other._Values[i];                    // don't forget the remainder
+                _Values[i] = (byte) rem;
+                rem >>= bitsDigit;
+            }
+
+            for (; (rem > 0) && (i < t_len); ++i)           // now increase our own remaining digits
+            {                                               // as long as the remainder is non-zero
+                rem += _Values[i];
+                _Values[i] = (byte)rem;
+                rem >>= bitsDigit;
+            }
+            if (rem > 0) AddDigit((byte)rem);               // still something left, just add it
+        }
+
+        //------------------------------------------------------------
+        protected void Multiply(byte Value)
         {
             if (Value == 0) { Clear(); return; }
             if (Value == 1) return;
@@ -384,7 +461,7 @@ namespace MMC.Numbers
 
         //------------------------------------------------------------
         // divide by an integer and return the remainder
-        protected virtual byte Divide(byte Value)
+        protected byte Divide(byte Value)
         {
             if (Value == 0) throw new CNumberException("Division by Zero!");
             if (Value == 1) return 0;
@@ -416,7 +493,7 @@ namespace MMC.Numbers
             int len = o_len - 1;
             while (pos >= 0)
             {
-                Rem.Insert(Save._Values[pos]);                      // take the next digit
+                Rem.InsertDigit(Save._Values[pos]);                 // take the next digit
 
                 byte q = Rem._Values[len];
                 q /= other._Values[len];                            // and make an estimate for the quotient 
@@ -431,50 +508,13 @@ namespace MMC.Numbers
                     Rem.add(other);
                 }
 
-                Insert(q);                                          // and write down the quotients digit
+                InsertDigit(q);                                     // and write down the quotients digit
                 --pos;                                              // walk one further in our (this) digits
             }
 
             _Sign = (_Sign != other._Sign);
             Trim();
             return Rem;
-        }
-
-        //------------------------------------------------------------
-        // add a number
-        // the native way to take care of the overflow
-        // is checking after the summation if the sum is less than
-        // one of the summands, this would mean overflow
-        // but this would need some more conditional branches
-        // so I choose a way with conversions from uint to ulong
-        // to let the .Net calc the overflow
-        protected virtual void Addition(CNumber_Integer other)
-        {
-            uint rem = 0;                                  // the remainder (either 0 or 1) (ulong for the overflow)
-            int o_len = other._Values.Count;                // the other length
-            int t_len = _Values.Count;                      // our own length
-            int len = (t_len  < o_len) ? t_len : o_len;     // calc the minimum length
-            int i = 0;                                      // start with the lowest digit
-            for (; i < len; i++)                            // first add all common digits
-            {
-                rem += other._Values[i];                    // val = rem + val + other.val
-                rem += _Values[i];
-                _Values[i] = (byte)rem;
-                rem >>= bitsDigit;                          // rem = overflow
-            }
-            for (; i < o_len; i++)                          // now copy the remaining from the other
-            {
-                rem += other._Values[i];                    // don't forget the remainder
-                _Values.Add((byte)rem);
-                rem >>= bitsDigit;
-            }
-            for (; (rem>0) && (i < t_len); i++)             // now increase our own remaining digits
-            {                                               // as long as the remainder is non-zero
-                rem += _Values[i];
-                _Values[i] = (byte)rem;
-                rem >>= bitsDigit;
-            }
-            if (rem > 0) _Values.Add((byte)rem);            // still something left, just add it
         }
 
         //------------------------------------------------------------
