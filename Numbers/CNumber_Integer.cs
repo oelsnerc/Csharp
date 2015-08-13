@@ -322,6 +322,20 @@ namespace MMC.Numbers
         // return the remainder
         public uint ShiftRight(uint Count)
         {
+            uint Remove = Count / bitsDigit;
+            Count %= bitsDigit;
+
+            if (Remove > 0)
+            {
+                if (Remove >= size)
+                {
+                    uint v = _Values[size - 1];
+                    setZero();
+                    return v;
+                }
+                _Values.RemoveRange(0, (int) Remove);
+            }
+
             uint mask = (uint) ((1 << (int)Count) - 1);
             int NegCount = (int) (bitsDigit - Count);
             byte rem = 0;

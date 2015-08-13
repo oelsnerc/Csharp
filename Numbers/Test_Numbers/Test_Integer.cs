@@ -95,12 +95,12 @@ namespace Test_Numbers
         [TestMethod]
         public void ShiftLeft_01()
         {
-            CNumber_Integer a = new CNumber_Integer(126);
+            CNumber_Integer a = new CNumber_Integer(0xAB);
             uint overflow = a.ShiftLeft(4);
 
-            Assert.AreEqual(2016, a.AsInteger);
+            Assert.AreEqual(0xAB0, a.AsInteger);
             Assert.AreEqual(2, a.size);
-            Assert.AreEqual(7U, overflow);
+            Assert.AreEqual(0xAU, overflow);
         }
 
         [TestMethod]
@@ -112,6 +112,61 @@ namespace Test_Numbers
             Assert.AreEqual(0xABCD0, a.AsInteger);
             Assert.AreEqual(3, a.size);
             Assert.AreEqual(0xAU, overflow);
+        }
+
+        [TestMethod]
+        public void ShiftLeft_03()
+        {
+            CNumber_Integer a = new CNumber_Integer(0xABCD);
+            uint overflow = a.ShiftLeft(12);
+
+            Assert.AreEqual(0xABCD000, a.AsInteger);
+            Assert.AreEqual(4, a.size);
+            Assert.AreEqual(0xAU, overflow);
+        }
+
+        [TestMethod]
+        public void ShiftRight_01()
+        {
+            CNumber_Integer a = new CNumber_Integer(0xAB);
+            uint underflow = a.ShiftRight(4);
+
+            Assert.AreEqual(0xA, a.AsInteger);
+            Assert.AreEqual(1, a.size);
+            Assert.AreEqual(0xBU, underflow);
+        }
+
+        [TestMethod]
+        public void ShiftRight_02()
+        {
+            CNumber_Integer a = new CNumber_Integer(0xABCD);
+            uint underflow = a.ShiftRight(4);
+
+            Assert.AreEqual(0xABC, a.AsInteger);
+            Assert.AreEqual(2, a.size);
+            Assert.AreEqual(0xDU, underflow);
+        }
+
+        [TestMethod]
+        public void ShiftRight_03()
+        {
+            CNumber_Integer a = new CNumber_Integer(0xABCDEF);
+            uint underflow = a.ShiftRight(12);
+
+            Assert.AreEqual(0xABC, a.AsInteger);
+            Assert.AreEqual(2, a.size);
+            Assert.AreEqual(0xDU, underflow);
+        }
+
+        [TestMethod]
+        public void ShiftRight_04()
+        {
+            CNumber_Integer a = new CNumber_Integer(0xABCDEF);
+            uint underflow = a.ShiftRight(32);
+
+            Assert.AreEqual(0, a.AsInteger);
+            Assert.AreEqual(1, a.size);
+            Assert.AreEqual(0xABU, underflow);
         }
     }
 }
