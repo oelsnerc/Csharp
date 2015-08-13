@@ -53,5 +53,65 @@ namespace Test_Numbers
             Assert.AreEqual(6, b.size);
         }
 
+        [TestMethod]
+        public void Check_Multiplication_01()
+        {
+            CNumber_Integer three = new CNumber_Integer(3);
+
+            CNumber_Integer a = new CNumber_Integer(42);
+            CNumber_Integer b = (CNumber_Integer) a.mul(three);
+
+            // check if the operdands are unchanged
+            Assert.AreEqual(42, a.AsInteger);
+            Assert.AreEqual(3, three.AsInteger);
+            
+            // check the result
+            Assert.AreEqual(126, b.AsInteger);
+            Assert.AreEqual(1, b.size);
+        }
+
+        [TestMethod]
+        public void Check_Multiplication_02()
+        {
+            CNumber_Integer three = new CNumber_Integer(3);
+
+            CNumber_Integer a = new CNumber_Integer(126);
+            CNumber_Integer b = (CNumber_Integer)a.mul(three);
+
+            Assert.AreEqual(378, b.AsInteger);
+            Assert.AreEqual(2, b.size);
+        }
+
+        [TestMethod]
+        public void Check_Multiplication_03()
+        {
+            CNumber_Integer a = new CNumber_Integer(378);
+            CNumber_Integer b = (CNumber_Integer)a.mul(a);
+
+            Assert.AreEqual(142884, b.AsInteger);
+            Assert.AreEqual(3, b.size);
+        }
+
+        [TestMethod]
+        public void ShiftLeft_01()
+        {
+            CNumber_Integer a = new CNumber_Integer(126);
+            uint overflow = a.ShiftLeft(4);
+
+            Assert.AreEqual(2016, a.AsInteger);
+            Assert.AreEqual(2, a.size);
+            Assert.AreEqual(7U, overflow);
+        }
+
+        [TestMethod]
+        public void ShiftLeft_02()
+        {
+            CNumber_Integer a = new CNumber_Integer(0xABCD);
+            uint overflow = a.ShiftLeft(4);
+
+            Assert.AreEqual(0xABCD0, a.AsInteger);
+            Assert.AreEqual(3, a.size);
+            Assert.AreEqual(0xAU, overflow);
+        }
     }
 }

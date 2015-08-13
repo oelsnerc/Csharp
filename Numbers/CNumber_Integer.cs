@@ -15,6 +15,11 @@ namespace MMC.Numbers
         public int size => _Values.Count;
         protected const long maxDigit = (long)(byte.MaxValue) + 1;
         protected const int bitsDigit = 8;
+        protected const int intDigits = 4;
+
+        //************************************************************
+        // some helper functions
+        //************************************************************
 
         //------------------------------------------------------------
         // to init everything
@@ -30,17 +35,6 @@ namespace MMC.Numbers
             _Sign = false;
         }
 
-        protected void setInteger(int Value)
-        {
-            Clear();
-            _Sign = (Value < 0.0);
-            do
-            {
-                _Values.Add((byte)(Value));
-                Value /= (int)maxDigit;
-            } while (Value >= 1);
-        }
-
         //------------------------------------------------------------
         // to copy
         protected virtual void CopyFrom(CNumber_Integer other)
@@ -49,12 +43,74 @@ namespace MMC.Numbers
             _Sign = other._Sign;
         }
 
+        //------------------------------------------------------------
+        // remove all leading zeros
+        protected virtual void Trim()
+        {
+            int end = _Values.Count - 1;
+            int cnt = end;
+            while (cnt > 0 && _Values[cnt] == 0) cnt--;
+            if (cnt < end) _Values.RemoveRange(cnt + 1, end - cnt);
+        }
+
+        //------------------------------------------------------------
+        // to convert into a string
+        //------------------------------------------------------------
+        // calc the binary algorithm
+        public static uint log_bin(uint value)
+        {
+            uint result = 0;
+            while (value > 1) { value >>= 1; ++result; };
+            return result;
+        }
+
+        //------------------------------------------------------------
+        // create a string to a base of a power of 2
+        protected string toString_2ish_base(uint Base)
+        {
+            uint bits = log_bin(Base);
+
+            // generate reversed string of digits
+            CNumber_Integer tmp = (CNumber_Integer)Clone();
+            string num = String.Empty;
+            int cnt = 0;
+            do
+            {
+                if (cnt == 4) { cnt = 0; num += '.'; }
+                uint rem = tmp.ShiftRight(bits);
+                num += (char)((rem > 9) ? (rem - 10 + 'A') : (rem + '0'));
+                ++cnt;
+            } while (!tmp.IsZero);
+            return num;
+        }
+
+        //------------------------------------------------------------
+        // create a string to a base that is not a power of 2
+        protected string toString_odd_base(byte Base)
+        {
+            // numbers of digits separated by '.'
+            int step = (Base == 10) ? 3 : 4;
+
+            // generate reversed string of digits
+            CNumber_Integer tmp = (CNumber_Integer)Clone();
+            string num = String.Empty;
+            int cnt = 0;
+            do
+            {
+                if (cnt == step) { cnt = 0; num += '.'; }
+                uint rem = tmp.Divide(Base);
+                num += (char)((rem > 9) ? (rem - 10 + 'A') : (rem + '0'));
+                cnt++;
+            } while (!tmp.IsZero);
+            return num;
+        }
+
         //************************************************************
         // constructors
         protected CNumber_Integer() { setZero(); }
 
         //------------------------------------------------------------
-        protected CNumber_Integer(CNumber_Integer other)
+        public CNumber_Integer(CNumber_Integer other)
         {
             if (other == null) { setZero(); }
             else { CopyFrom(other);  }
@@ -63,7 +119,7 @@ namespace MMC.Numbers
         //------------------------------------------------------------
         public CNumber_Integer(int Value)
         {
-            setInteger(Value);
+            AsInteger = Value;
         }
 
         //------------------------------------------------------------
@@ -101,72 +157,12 @@ namespace MMC.Numbers
             FromString(Str);
         }
 
-        //************************************************************
-        // some helper functions
-        //************************************************************
-        
-        //------------------------------------------------------------
-        // remove all leading zeros
-        protected virtual void Trim()
-        {
-            int end = _Values.Count-1;
-            int cnt = end;
-            while (cnt > 0 && _Values[cnt] == 0) cnt--;
-            if (cnt < end) _Values.RemoveRange(cnt+1, end - cnt);
-        }
-
         //------------------------------------------------------------
         // copy this one
         public override CNumber Clone() { return new CNumber_Integer(this); }
 
         //------------------------------------------------------------
         public override CNumberType MyType { get { return CNumberType.cnt_Integer; } }
-
-
-        // calc the binary algorithm
-        public static uint log_bin(uint value)
-        {
-            uint result = 0;
-            while (value > 1) { value >>= 1; ++result; };
-            return result;
-        }
-
-        protected string toString_2ish_base(uint Base)
-        {
-            uint bits = log_bin(Base);
-
-            // generate reversed string of digits
-            CNumber_Integer tmp = (CNumber_Integer)Clone();
-            string num = String.Empty;
-            int cnt = 0;
-            do
-            {
-                if (cnt == 4) { cnt = 0; num += '.'; }
-                uint rem = tmp.ShiftRight(bits);
-                num += (char)((rem > 9) ? (rem - 10 + 'A') : (rem + '0'));
-                ++cnt;
-            } while (!tmp.IsZero);
-            return num;
-        }
-
-        protected string toString_odd_base(byte Base)
-        {
-            // numbers of digits separated by '.'
-            int step = (Base == 10) ? 3 : 4;
-
-            // generate reversed string of digits
-            CNumber_Integer tmp = (CNumber_Integer)Clone();
-            string num = String.Empty;
-            int cnt = 0;
-            do
-            {
-                if (cnt == step) { cnt = 0; num += '.'; }
-                uint rem = tmp.Divide(Base);
-                num += (char)((rem > 9) ? (rem - 10 + 'A') : (rem + '0'));
-                cnt++;
-            } while (!tmp.IsZero);
-            return num;
-        }
 
         // generate the base indicator string
         public static string getBaseIndication(uint Base)
@@ -224,16 +220,31 @@ namespace MMC.Numbers
         }
 
         //------------------------------------------------------------
-        // to set or get the value as integer
+        // property to set or get the value as integer
         public override int AsInteger
         {
             get
             {
-                return (_Sign) ? (-((int) _Values[0])) : ((int) _Values[0]);
+                int begin = ((size > intDigits) ? intDigits : size) - 1;
+                int result = _Values[begin];
+
+                for (int i = begin - 1; i >= 0; --i)
+                {
+                    result <<= bitsDigit;
+                    result += _Values[i];
+                }
+                return (_Sign) ? -result : result;
             }
+
             set
             {
-                setInteger(value);
+                Clear();
+                _Sign = (value < 0.0);
+                do
+                {
+                    _Values.Add((byte)(value));
+                    value /= (int)maxDigit;
+                } while (value >= 1);
             }
         }
 
@@ -280,7 +291,7 @@ namespace MMC.Numbers
         //------------------------------------------------------------
         // multiply by a power of 2
         // return the remainder
-        protected virtual uint ShiftLeft(uint Count)
+        public uint ShiftLeft(uint Count)
         {
             //TODO think of using the "InsertRange" more efficient
             byte rem = 0;
@@ -309,7 +320,7 @@ namespace MMC.Numbers
         //------------------------------------------------------------
         // devide by a power of 2
         // return the remainder
-        protected virtual uint ShiftRight(uint Count)
+        public uint ShiftRight(uint Count)
         {
             uint mask = (uint) ((1 << (int)Count) - 1);
             int NegCount = (int) (bitsDigit - Count);
